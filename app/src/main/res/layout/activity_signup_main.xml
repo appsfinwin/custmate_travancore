@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.finwin.travancore.traviz.sign_up.sign_up.SignUpViewmodel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimaryDark"
+        android:layout_height="match_parent"
+        tools:context="com.finwin.travancore.traviz.sign_up.sign_up.SignUpActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+
+            android:orientation="vertical"
+            android:paddingBottom="80.3dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:layout_marginTop="31dp"
+                android:background="@color/colorPrimaryDark"
+                android:orientation="vertical"
+                android:paddingTop="15dp">
+
+                <LinearLayout
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16.3dp"
+                        android:fontFamily="sans-serif"
+                        android:paddingTop="5dp"
+                        android:text="Account Number"
+                        android:textColor="@color/white"
+                        android:textSize="11.7sp"
+
+                        android:textStyle="normal" />
+
+                    <EditText
+                        android:inputType="textNoSuggestions|number"
+                        android:textCursorDrawable="@drawable/color_cursor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif"
+                        android:hint="Enter Account Number"
+                        android:text="@={viewmodel.obAccountNumber}"
+                        android:paddingBottom="15.7dp"
+                        android:paddingLeft="16.3dp"
+                        android:paddingTop="15.7dp"
+                        android:maxLines="1"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/tab_unselect_txt"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/signin_rect"
+                android:orientation="vertical"
+                android:paddingTop="15dp">
+
+                <LinearLayout
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16.3dp"
+                        android:fontFamily="sans-serif"
+                        android:paddingTop="5dp"
+                        android:text="Name"
+                        android:textColor="@color/white"
+                        android:textSize="11.7sp"
+                        android:textStyle="normal" />
+
+                    <EditText
+                        android:inputType="textNoSuggestions"
+                        android:textCursorDrawable="@drawable/color_cursor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif"
+                        android:hint="Enter Name"
+                        android:paddingLeft="16.3dp"
+                        android:paddingTop="15.7dp"
+                        android:paddingBottom="15.7dp"
+                        android:text="@={viewmodel.obName}"
+                        android:maxLines="1"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/tab_unselect_txt"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/signin_rect"
+                android:orientation="vertical"
+                android:paddingTop="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16.3dp"
+                        android:fontFamily="sans-serif"
+                        android:paddingTop="5dp"
+                        android:text="Mobile Number"
+                        android:textColor="@color/white"
+                        android:textSize="11.7sp"
+                        android:textStyle="normal" />
+
+
+                    <EditText
+                        android:inputType="textNoSuggestions|phone"
+                        android:textCursorDrawable="@drawable/color_cursor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif"
+                        android:hint="Enter Mobile Number"
+                        android:importantForAutofill="no"
+                        android:text="@={viewmodel.obMobile}"
+                        android:paddingBottom="15.7dp"
+                        android:paddingLeft="16.3dp"
+                        android:paddingTop="15.7dp"
+                        android:maxLines="1"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/tab_unselect_txt"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/signin_rect"
+                android:orientation="vertical"
+                android:paddingTop="15dp">
+
+                <LinearLayout
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16.3dp"
+                        android:fontFamily="sans-serif"
+                        android:paddingTop="5dp"
+                        android:text="Password"
+                        android:textColor="@color/white"
+                        android:textSize="11.7sp"
+                        android:textStyle="normal" />
+
+                    <EditText
+                        android:textCursorDrawable="@drawable/color_cursor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif"
+                        android:hint="Enter Password"
+                        android:importantForAutofill="no"
+                        android:text="@={viewmodel.obPassword}"
+                        android:inputType="textNoSuggestions|textPassword"
+                        android:paddingBottom="15.7dp"
+                        android:paddingLeft="16.3dp"
+                        android:paddingTop="15.7dp"
+                        android:maxLines="1"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/tab_unselect_txt"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:layout_marginTop="10dp"
+
+                android:orientation="vertical"
+                android:paddingTop="15dp">
+
+                <LinearLayout
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16.3dp"
+                        android:fontFamily="sans-serif"
+                        android:paddingTop="5dp"
+
+                        android:text="Confirm Password"
+                        android:textColor="@color/white"
+                        android:textSize="11.7sp"
+                        android:textStyle="normal" />
+
+                    <EditText
+                        android:textCursorDrawable="@drawable/color_cursor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif"
+                        android:hint="ReEnter Password"
+                        android:text="@={viewmodel.obConfirmPassword}"
+                        android:importantForAutofill="no"
+                        android:inputType="textNoSuggestions|textPassword"
+                        android:paddingBottom="15.7dp"
+                        android:paddingLeft="16.3dp"
+                        android:paddingTop="15.7dp"
+                        android:maxLines="1"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/tab_unselect_txt"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btn_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/signin_rect"
+                android:elevation="1dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:paddingBottom="15.7dp"
+                android:paddingTop="15.7dp"
+                android:text="SIGN UP"
+                android:onClick="@{viewmodel::clickSignUp}"
+                android:textColor="@color/blue"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:text="By clicking “Sign up” I agree to"
+                android:textColor="@color/white"
+                android:textSize="11.7sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:text="Terms and Service."
+                android:textColor="@color/white"
+                android:textSize="11.7sp"
+                android:textStyle="normal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center_horizontal"
+                    android:text="Already have an account?"
+                    android:textColor="@color/white"
+                    android:textSize="13.3sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:onClick="@{viewmodel::clickSignIn}"
+                    android:id="@+id/tv_signin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:paddingEnd="15dp"
+                    android:paddingStart="10dp"
+                    android:text="Sign in"
+                    android:textColor="@color/white"
+                    android:textSize="13.3sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</layout>

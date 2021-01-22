@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.finwin.travancore.traviz.login.LoginViewmodel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:src="@drawable/banner_nm" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imageBack"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/card1" />
+
+            <ImageView
+                android:id="@+id/imagefront"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/card_group_demo"  />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/linear_usr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imagefront"
+                android:layout_marginLeft="66.3dp"
+                android:layout_marginRight="66.3dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/background_gradient"
+                android:elevation="1dp">
+
+                <EditText
+                    android:id="@+id/edt_usr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imagefront"
+                    android:layout_marginEnd="2dp"
+                    android:background="@color/transparent"
+                    android:drawableStart="@drawable/ic_user"
+                    android:drawablePadding="8dp"
+                    android:hint="Username"
+                    android:paddingStart="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
+                    android:text="@={viewmodel.ob_userName}"
+                    android:textColor="@color/bg_blue"
+                    android:textColorHint="@color/black_txt"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linear_usr"
+                android:layout_marginLeft="66.3dp"
+                android:layout_marginRight="66.3dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/background_gradient"
+                android:elevation="1dp">
+
+                <EditText
+                    android:id="@+id/edt_pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="2dp"
+                    android:background="@color/transparent"
+                    android:drawableStart="@drawable/ic_lock"
+                    android:drawablePadding="8dp"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
+                    android:text="@={viewmodel.ob_password}"
+                    android:textColor="@color/bg_blue"
+                    android:textColorHint="@color/black_txt"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/imageBack"
+                android:layout_marginEnd="45dp"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="-10dp"
+                android:indeterminate="true"
+                android:visibility="invisible" />
+
+            <Button
+                android:onClick="@{viewmodel::clickLogin}"
+                android:id="@+id/btn_signin"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/progress"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_gradient"
+                android:elevation="2dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:paddingBottom="15.7dp"
+                android:paddingTop="15.7dp"
+                android:scaleType="fitXY"
+                android:text="SIGN IN"
+                android:textColor="@color/bg_blue"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <LinearLayout
+                android:id="@+id/signUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/btn_signin"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center_horizontal"
+                    android:text="Don’t have an account?"
+                    android:textColor="@color/black_txt"
+                    android:textSize="13.3sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:onClick="@{viewmodel::clickSignUp}"
+                    android:id="@+id/tv_signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingEnd="15dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="15dp"
+                    android:text="Sign up"
+                    android:textColor="@color/bg_blue"
+                    android:textSize="13.3sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

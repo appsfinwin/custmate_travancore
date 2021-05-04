@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.finwin.travancore.traviz.SupportingClass.Enc_crypter;
 import com.finwin.travancore.traviz.home.mini_statement.action.MiniStatementAction;
 import com.finwin.travancore.traviz.home.mini_statement.pojo.MiniStatementResponse;
+import com.finwin.travancore.traviz.home.transfer.view_recent_transfers.action.RecentTransactionsAction;
+import com.finwin.travancore.traviz.home.transfer.view_recent_transfers.pojo.transaction_list.TransactionListResponse;
 import com.finwin.travancore.traviz.pojo.Response;
 import com.finwin.travancore.traviz.retrofit.ApiInterface;
 import com.google.gson.Gson;
@@ -12,6 +14,8 @@ import com.google.gson.GsonBuilder;
 
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
@@ -69,25 +73,8 @@ public class MiniStatementRepository {
                     @Override
                     public void onSuccess(Response response) {
 
-                        try {
-                            String data=decValues(encr.revDecString(response.getData()));
-                            data=decValues(encr.revDecString(response.getData()));
-                            Gson gson = new GsonBuilder().create();
-                            MiniStatementResponse miniStatementResponse = gson.fromJson(data, MiniStatementResponse.class);
+                        fetchData(response.getData());
 
-                            if (miniStatementResponse.getMiniStatement()!=null)
-                            {
-                                mAction.setValue(new MiniStatementAction(MiniStatementAction.MINI_STATEMENT_SUCCESS,miniStatementResponse));
-                            }
-                            else
-                            {
-                                mAction.setValue(new MiniStatementAction(MiniStatementAction.API_ERROR,"Please try again!"));
-                            }
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
                     }
 
                     @Override
@@ -105,4 +92,39 @@ public class MiniStatementRepository {
                     }
                 });
     }
+
+    Runnable mRunnable;
+    Executor mExecutor = Executors.newSingleThreadExecutor();
+    public void fetchData(final String response)
+    {
+        mRunnable = new Runnable() {
+            @Override
+            public void run() {
+
+
+                try {
+                    String data=decValues(encr.revDecString(response));
+                    data=decValues(encr.revDecString(response));
+                    Gson gson = new GsonBuilder().create();
+                    MiniStatementResponse miniStatementResponse = gson.fromJson(data, MiniStatementResponse.class);
+
+                    if (miniStatementResponse.getMiniStatement()!=null)
+                    {
+                        mAction.postValue(new MiniStatementAction(MiniStatementAction.MINI_STATEMENT_SUCCESS,miniStatementResponse));
+                    }
+                    else
+                    {
+                        mAction.postValue(new MiniStatementAction(MiniStatementAction.API_ERROR,"Please try again!"));
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        mExecutor.execute(mRunnable);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.finwin.travancore.traviz.home.mini_statement;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -36,8 +37,12 @@ public class MiniStatementViewmodel extends AndroidViewModel {
 
         repository.setCompositeDisposable(compositeDisposable);
         repository.setmAction(mAction);
-    }
 
+        sharedPreferences= application.getSharedPreferences("com.finwin.travancore.traviz",Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
+    }
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     MiniStatementRepository repository;
     CompositeDisposable compositeDisposable;
     MutableLiveData<MiniStatementAction> mAction;
@@ -69,7 +74,7 @@ public class MiniStatementViewmodel extends AndroidViewModel {
 
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
-        items.put("account_no", ConstantClass.const_accountNumber);
+        items.put("account_no",  sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
 
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
         apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);

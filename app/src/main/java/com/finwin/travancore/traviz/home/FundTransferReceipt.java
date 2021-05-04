@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentActivity;
 
 import com.finwin.travancore.traviz.R;
+import com.finwin.travancore.traviz.activity_main.ActivityMain;
+import com.finwin.travancore.traviz.home.transfer.view_beneficiary_list.BeneficiaryListActivity;
 
 
 public class FundTransferReceipt extends FragmentActivity {
@@ -25,7 +27,7 @@ public class FundTransferReceipt extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.frg_fund_transfer_receipt);
 
-        sharedPreferences= getSharedPreferences(" com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        sharedPreferences= getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
         editor= sharedPreferences.edit();
 
         Intent intent = getIntent();
@@ -76,10 +78,9 @@ public class FundTransferReceipt extends FragmentActivity {
         BtnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editor.putString("success","yes");
-                editor.commit();
-
+                startActivity(new Intent(FundTransferReceipt.this, ActivityMain.class));
                 finish();
+
             }
         });
 

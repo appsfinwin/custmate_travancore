@@ -7,6 +7,11 @@ public class AccNo {
     @SerializedName("accNo")
     @Expose
     private String accNo;
+
+    @SerializedName("schname_cat")
+    @Expose
+    private String schemeName;
+
     @SerializedName("schname")
     @Expose
     private String schname;
@@ -27,4 +32,17 @@ public class AccNo {
         this.schname = schname;
     }
 
+    public String getSchemeName() {
+        return schemeName;
+    }
+
+    public void setSchemeName(String schemeName) {
+        this.schemeName = schemeName;
+    }
+
+    public AccNo(String accNo, String schemeName, String schname) {
+        this.accNo = accNo;
+        this.schemeName = schemeName;
+        this.schname = schname;
+    }
 }

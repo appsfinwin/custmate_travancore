@@ -161,7 +161,7 @@ public class NeftRepository {
                             Gson gson = new GsonBuilder().create();
                             ValidateMpinResponse validateMpinResponse = gson.fromJson(data, ValidateMpinResponse.class);
 
-                            if (validateMpinResponse.getValue() != null) {
+                            if (validateMpinResponse.getValue()) {
                                 mAction.setValue(new NeftAction(NeftAction.VALIDATE_MPIN_SUCCESS, validateMpinResponse));
                             }else {
                                // String error=validateMpinResponse.getError();

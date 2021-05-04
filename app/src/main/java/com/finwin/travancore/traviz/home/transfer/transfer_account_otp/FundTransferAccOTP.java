@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
+
 
 import com.finwin.travancore.traviz.R;
 import com.finwin.travancore.traviz.SupportingClass.ConstantClass;
@@ -33,8 +33,9 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class FundTransferAccOTP extends AppCompatActivity {
-
+    boolean doubleBackToExitPressedOnce = false;
     Enc_crypter encr = new Enc_crypter();
+
     SweetAlertDialog sweetDialog,dialog;
 
     Button btn_SendOTP;
@@ -44,26 +45,25 @@ public class FundTransferAccOTP extends AppCompatActivity {
             receiptName, receiptMobile, receiptOldBalance, receiptWithdrawalAmount, receiptCurrentBalance,
             Str_OTP = "",
             StrAccNo, StrCrAccNo, StrProcess_amnt, Str_agent_id, Str_otp_data, Str_otp_id,
-            StrOTP_data, StrOTP_id,from,TXN_PAYMODE;
+            StrOTP_data,from,TXN_PAYMODE,beneid;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
 
-    String  msg, beneid;
+
+
     private static final String TAG = "FundTransferAccOTP";
     FundTranferOtpViewmodel viewmodel;
-    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.frg_fund_transfer_otpview);
+
         sweetDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         dialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-
-        sharedPreferences= getSharedPreferences(" com.finwin.travancore.traviz",Context.MODE_PRIVATE);
+        sharedPreferences= getSharedPreferences("com.finwin.mythri.custmate",Context.MODE_PRIVATE);
         editor= sharedPreferences.edit();
-
         viewmodel=new ViewModelProvider((ViewModelStoreOwner) this).get(FundTranferOtpViewmodel.class);
         Intent intent = getIntent();
         from=intent.getStringExtra("from");
@@ -81,7 +81,7 @@ public class FundTransferAccOTP extends AppCompatActivity {
             @Override
             public void onChanged(FundTransferOtpAction fundTransferOtpAction) {
 
-               cancelLoading();
+                cancelLoading();
                 switch (fundTransferOtpAction.getAction())
                 {
                     case FundTransferOtpAction.NEFT_SUCCESS:
@@ -114,24 +114,23 @@ public class FundTransferAccOTP extends AppCompatActivity {
                         finish();
 
                         break;
-                        case FundTransferOtpAction.API_ERROR:
+                    case FundTransferOtpAction.API_ERROR:
 
-                            new SweetAlertDialog(FundTransferAccOTP.this, SweetAlertDialog.ERROR_TYPE)
-                                    .setContentText(fundTransferOtpAction.getError())
-                                    .setTitleText("Error")
-                                    .show();
-                            break;
+                        new SweetAlertDialog(FundTransferAccOTP.this, SweetAlertDialog.ERROR_TYPE)
+                                .setContentText(fundTransferOtpAction.getError())
+                                .setTitleText("Error")
+                                .show();
+                        break;
 
-                            case FundTransferOtpAction.OTP_SUCCESS:
+                    case FundTransferOtpAction.OTP_SUCCESS:
 
-                                edt_OTP.setText("");
-                                StrOTP_data = fundTransferOtpAction.getResendOtpResponse().getOtp().getData();
-                                Str_otp_id =  fundTransferOtpAction.getResendOtpResponse().getOtp().getOtpId();
-                                new SweetAlertDialog(FundTransferAccOTP.this, SweetAlertDialog.SUCCESS_TYPE)
-                                        .setContentText("OTP sent successfully!")
-                                        .setTitleText("Success")
-                                        .show();
-                                break;
+                        StrOTP_data = fundTransferOtpAction.getResendOtpResponse().getOtp().getData();
+                        Str_otp_id =  fundTransferOtpAction.getResendOtpResponse().getOtp().getOtpId();
+                        new SweetAlertDialog(FundTransferAccOTP.this, SweetAlertDialog.SUCCESS_TYPE)
+                                .setContentText("OTP sent successfully!")
+                                .setTitleText("Success")
+                                .show();
+                        break;
 
 
                 }
@@ -146,13 +145,13 @@ public class FundTransferAccOTP extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (edt_OTP.getText().toString().equals("")) {
-                    Toast.makeText(FundTransferAccOTP.this, "Please Enter OTP", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FundTransferAccOTP.this, "Please Enter OTP", Toast.LENGTH_LONG).show();
                 } else {
 
                     Str_OTP = edt_OTP.getText().toString();
 
                     if (from.equals("neft")){
-                       // transfer_neft();
+                        // transfer_neft();
                         neftApiCall();
                     }else if (from.equals("account")) {
                         //Transfer();
@@ -227,44 +226,6 @@ public class FundTransferAccOTP extends AppCompatActivity {
         Log.d(TAG, "transfer_request: "+request);
         viewmodel.accountTransfer(params);
     }
-
-
-    public void resendOtp(){
-        sweetDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        sweetDialog.setTitleText("Requesting OTP");
-        sweetDialog.setCancelable(false);
-        sweetDialog.show();
-
-        Map<String, String> params = new HashMap<>();
-        Map<String, String> items = new HashMap<>();
-        items.put("particular", "mob_resent");
-        items.put("account_no", ConstantClass.const_accountNumber);
-        items.put("amount", StrProcess_amnt);
-        items.put("agent_id", ConstantClass.const_cusId);
-
-
-
-        String request=(new JSONObject(items)).toString();
-        Log.d(TAG, "transfer_request: "+request);
-        params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
-
-        viewmodel.resendOtp(params);
-
-    }
-
-    public void cancelLoading()
-    {
-        if(dialog!=null)
-        {
-            dialog.dismiss();
-        }
-
-        if(sweetDialog!=null)
-        {
-            sweetDialog.dismiss();
-        }
-    }
-
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -285,5 +246,293 @@ public class FundTransferAccOTP extends AppCompatActivity {
                 doubleBackToExitPressedOnce=false;
             }
         }, 2000);
+    }
+
+
+    public void resendOtp(){
+        sweetDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        sweetDialog.setTitleText("Requesting OTP");
+        sweetDialog.setCancelable(false);
+        sweetDialog.show();
+
+        Map<String, String> params = new HashMap<>();
+        Map<String, String> items = new HashMap<>();
+        items.put("particular", "mob_resent");
+        items.put("account_no",
+                sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
+        items.put("amount", StrProcess_amnt);
+        items.put("agent_id", sharedPreferences.getString(ConstantClass.CUST_ID,""));
+
+
+
+        String request=(new JSONObject(items)).toString();
+        Log.d(TAG, "transfer_request: "+request);
+        params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
+
+        viewmodel.resendOtp(params);
+
+    }
+//    private void re_generateOTP() {
+//        sweetDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+//        sweetDialog.setTitleText("Transferring..");
+//        sweetDialog.setCancelable(false);
+//        sweetDialog.show();
+//
+//
+//        requestQueue = Volley.newRequestQueue(FundTransferAccOTP.this);
+//        StringRequest postRequest = new StringRequest(Request.Method.POST, api_OTPGenerate,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        try {
+//                            JSONObject jsonFrstRespns = new JSONObject(response);
+//                            if (jsonFrstRespns.has("data")) {
+//                                demessage = decValues(encr.revDecString(jsonFrstRespns.getString("data")));
+//                                Log.d(TAG, "otp_response: "+demessage);
+//                                Log.e("demessage OTPGenerate", demessage);
+//                            }
+//
+//                            JSONObject jsonResponse = new JSONObject(demessage);
+//
+//                            String request=jsonResponse.toString();
+//                            Log.d(TAG, "transfer_response: "+request);
+//                            if (jsonResponse.has("otp")) {
+//                                JSONObject jobj2 = jsonResponse.getJSONObject("otp");
+//                                if (jobj2.has("error")) {
+//                                    error = jobj2.getString("error");
+//                                    TrMsg = "InvalidOtp";
+//                                } else {
+//                                    StrOTP_data = jobj2.getString("data");
+//                                    Str_otp_id = jobj2.getString("otp_id");
+//
+//                                    TrMsg = "success";
+//                                }
+//
+////                                if (jsonResponse.has("data")) {
+////                                    JSONObject jobj2 = jsonResponse.getJSONObject("data");
+////                                    StrOTP_data = jobj2.getString("data");
+////                                    StrOTP_id = jobj2.getString("otp_id");
+////                                    TrMsg = "success";
+////                                }
+//                            } else {
+//                                TrMsg = "error";
+//                            }
+//                        } catch (Exception e) {
+//                            tv_ReSendOTP.setEnabled(true);
+//                            sweetDialog.dismiss();
+//
+//                            e.printStackTrace();
+//                            TrMsg = "NoInternet";
+//                            ErrorLog.submitError(FundTransferAccOTP.this, this.getClass().getSimpleName() + ":" + new Object() {
+//                            }.getClass().getEnclosingMethod().getName(), e.toString());
+//                        }
+//
+//                        try {
+//                            tv_ReSendOTP.setEnabled(true);
+//                            sweetDialog.dismiss();
+//                            switch (TrMsg) {
+//                                case "InvalidOtp":
+//                                    new SweetAlertDialog(FundTransferAccOTP.this, SweetAlertDialog.ERROR_TYPE)
+//                                            .setContentText(error)
+//                                            .setTitleText("Error!")
+//                                            .show();
+//                                    break;
+//                                case "error":
+//                                    new SweetAlertDialog(FundTransferAccOTP.this, SweetAlertDialog.ERROR_TYPE)
+//                                            .setContentText("Server Error Occurred!")
+//                                            .setTitleText("Error!")
+//                                            .show();
+//                                    break;
+//                                case "success":
+//                                    new SweetAlertDialog(FundTransferAccOTP.this, SweetAlertDialog.SUCCESS_TYPE)
+//                                            .setContentText("OTP sent successfully!")
+//                                            .setTitleText("Success")
+//                                            .show();
+//                                    break;
+//                                default:
+//                                    break;
+//                            }
+//                        } catch (Exception e) {
+//                            tv_ReSendOTP.setEnabled(true);
+//                            sweetDialog.dismiss();
+//                            e.printStackTrace();
+//                            ErrorLog.submitError(FundTransferAccOTP.this, this.getClass().getSimpleName() + ":" + new Object() {
+//                            }.getClass().getEnclosingMethod().getName(), e.toString());
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // TODO Auto-generated method stub
+//                        tv_ReSendOTP.setEnabled(true);
+//                        sweetDialog.dismiss();
+//                        Log.d("ERROR", "error => " + error.toString());
+//                        TrMsg = "NoInternet";
+//                        ErrorLog.submitError(FundTransferAccOTP.this, this.getClass().getSimpleName() + ":" + new Object() {
+//                        }.getClass().getEnclosingMethod().getName(), error.toString());
+//                    }
+//                }
+//        ) {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                // the POST parameters:
+//                Map<String, String> params = new HashMap<>();
+//                Map<String, String> items = new HashMap<>();
+//                items.put("particular", "mob_resent");
+//                items.put("account_no", ConstantClass.const_accountNumber);
+//                items.put("amount", StrProcess_amnt);
+//                items.put("agent_id", ConstantClass.const_cusId);
+//
+//
+//
+//                String request=(new JSONObject(items)).toString();
+//                Log.d(TAG, "transfer_request: "+request);
+//                params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
+//
+//                Log.e("OTPGenerate: ", String.valueOf(items));
+//                Log.e("OTPGenerate data", String.valueOf(params));
+//
+//                return params;
+//            }
+//        };
+//        requestQueue.add(postRequest);
+//    }
+
+//    private void Transfer() {
+//        sweetDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+//        sweetDialog.setTitleText("Transferring..");
+//        sweetDialog.setCancelable(false);
+//        sweetDialog.show();
+//
+//        requestQueue = Volley.newRequestQueue(FundTransferAccOTP.this);
+//        StringRequest postRequest = new StringRequest(Request.Method.POST, api_cashTransfer,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        try {
+//                            JSONObject jsonFrstRespns = new JSONObject(response);
+//                            if (jsonFrstRespns.has("data")) {
+//                                demessage = decValues(encr.revDecString(jsonFrstRespns.getString("data")));
+//                                Log.e("demessage Transfer", demessage);
+//
+//                                Log.d(TAG, "transfer_response: "+demessage);
+//                            }
+//                            JSONObject jsonResponse = new JSONObject(demessage).getJSONObject("receipt");
+//
+//                            if (jsonResponse.has("data")) {
+//                                JSONObject jobj2 = jsonResponse.getJSONObject("data");
+//                                Log.e("Receipt", jobj2.toString());
+//                                receiptTransferID = jobj2.getString("TRAN_ID");
+//                                receiptTransferDate = jobj2.getString("TRANSFER_DATE");
+//                                receiptDebitAccno = jobj2.getString("ACC_NO");
+//                                receiptCreditAccno = jobj2.getString("BEN_ACC_NO");
+//                                receiptName = jobj2.getString("NAME");
+//                                receiptMobile = jobj2.getString("MOBILE");
+//                                receiptOldBalance = jobj2.getString("OLD_BALANCE");
+//                                receiptWithdrawalAmount = jobj2.getString("WITHDRAWAL_AMOUNT");
+//                                receiptCurrentBalance = jobj2.getString("CURRENT_BALANCE");
+//
+//                                TrMsg = "success";
+//                            }
+//                            if (jsonResponse.has("error")) {
+//                                error = jsonResponse.getString("error");
+//                                TrMsg = "InvalidOtp";
+//                            }
+//                        } catch (Exception e) {
+//                            btn_SendOTP.setEnabled(true);
+//                            sweetDialog.dismiss();
+//                            e.printStackTrace();
+//                            TrMsg = "NoInternet";
+//                            ErrorLog.submitError(FundTransferAccOTP.this, this.getClass().getSimpleName() + ":" + new Object() {
+//                            }.getClass().getEnclosingMethod().getName(), e.toString());
+//                        }
+//
+//                        try {
+//                            btn_SendOTP.setEnabled(true);
+//                            sweetDialog.dismiss();
+//                            if (TrMsg.equals("InvalidOtp")) {
+//                                new SweetAlertDialog(FundTransferAccOTP.this, SweetAlertDialog.ERROR_TYPE)
+//                                        .setContentText(error)
+//                                        .setTitleText("Error!")
+//                                        .show();
+//                            } else {
+//                                //Log.e("Printed",errorCode);
+//                                //Toast.makeText(ctx, "errorCode ", Toast.LENGTH_SHORT).show();
+//                                Intent intent = new Intent(FundTransferAccOTP.this, FundTransferReceipt.class);
+//                                intent.putExtra("transactionID", receiptTransferID);
+//                                intent.putExtra("transactionDate", receiptTransferDate);
+//                                intent.putExtra("account_number", receiptDebitAccno);
+//                                intent.putExtra("debit_account_number", receiptCreditAccno);
+//                                intent.putExtra("name", receiptName);
+//                                intent.putExtra("mobile", receiptMobile);
+//                                intent.putExtra("old_balance", receiptOldBalance);
+//                                intent.putExtra("withdrawalAmount", receiptWithdrawalAmount);
+//                                intent.putExtra("current_balance", receiptCurrentBalance);
+//                                startActivity(intent);
+//                                finish();
+//                            }
+//                        } catch (Exception e) {
+//                            btn_SendOTP.setEnabled(true);
+//                            sweetDialog.dismiss();
+//                            e.printStackTrace();
+//                            ErrorLog.submitError(FundTransferAccOTP.this, this.getClass().getSimpleName() + ":" + new Object() {
+//                            }.getClass().getEnclosingMethod().getName(), e.toString());
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // TODO Auto-generated method stub
+//                        btn_SendOTP.setEnabled(true);
+//                        sweetDialog.dismiss();
+//                        Log.d("ERROR", "error => " + error.toString());
+//                        TrMsg = "NoInternet";
+//                        ErrorLog.submitError(FundTransferAccOTP.this, this.getClass().getSimpleName() + ":" + new Object() {
+//                        }.getClass().getEnclosingMethod().getName(), error.toString());
+//                    }
+//                }
+//        ) {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                // the POST parameters:
+//                Map<String, String> params = new HashMap<>();
+//                Map<String, String> items = new HashMap<>();
+//
+//                items.put("otp_val", Str_OTP);
+//                items.put("otp_id", Str_otp_id);
+//                items.put("account_no", StrAccNo);
+//                items.put("beni_account_no", StrCrAccNo);
+//                // beni
+//                items.put("process_amount", StrProcess_amnt);
+//                items.put("agent_id", Str_agent_id);
+//                items.put("transferType", "own");
+//                //
+////                params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
+//
+//                Log.e("getParams: ", String.valueOf(items));
+//                String data = encr.conRevString(Enc_Utils.enValues(items));
+//                Log.e("getParams: data =", data);
+//                params.put("data", data);
+//                return params;
+//            }
+//        };
+//        requestQueue.add(postRequest);
+//    }
+
+    public void cancelLoading()
+    {
+        if(dialog!=null)
+        {
+            dialog.dismiss();
+            //dialog=null;
+        }
+
+        if(sweetDialog!=null)
+        {
+            sweetDialog.dismiss();
+            //dialog=null;
+        }
     }
 }

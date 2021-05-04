@@ -9,6 +9,7 @@ public class MpinRegisterAction {
     public static final int API_ERROR=2;
     public static final int MPIN_REGISTER_SUCCESS=3;
     public static final int MPIN_REGISTER_ERROR=4;
+    public static final int CLICK_SUBMIT=5;
     public int action;
     public String error;
     public LoginResponse loginResponse;

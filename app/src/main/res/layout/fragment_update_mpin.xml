@@ -54,7 +54,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <androidx.cardview.widget.CardView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -66,16 +66,14 @@
             app:layout_constraintTop_toBottomOf="@+id/linear_one"
             app:layout_constraintVertical_bias="0.38">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/tableLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/colorPrimaryDark"
+                    android:elevation="5dp"
+                    android:background="@drawable/bg_rectangle_white_cornered"
                     android:paddingStart="20dp"
                     android:paddingTop="30dp"
                     android:paddingEnd="20dp"
@@ -86,15 +84,16 @@
                         android:id="@+id/textInputLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/blue_rect"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:elevation="1dp"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
+
                             android:id="@+id/et_mpin_old"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -105,8 +104,8 @@
                             android:paddingStart="16.3dp"
                             android:paddingTop="15.7dp"
                             android:paddingBottom="15.7dp"
-                            android:textColor="@color/white"
-                            android:textColorHint="@color/white"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
                             android:textSize="15sp"
                             android:textStyle="normal" />
 
@@ -119,13 +118,13 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout2"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/blue_rect"
                         android:elevation="1dp"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -141,8 +140,8 @@
                             android:paddingStart="16.3dp"
                             android:paddingTop="15.7dp"
                             android:paddingBottom="15.7dp"
-                            android:textColor="@color/white"
-                            android:textColorHint="@color/white"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
                             android:textSize="15sp"
                             android:textStyle="normal" />
 
@@ -154,13 +153,13 @@
 
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:id="@+id/textInputLayout3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:background="@drawable/blue_rect"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
                         android:elevation="1dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -177,8 +176,8 @@
                             android:paddingStart="16.3dp"
                             android:paddingTop="15.7dp"
                             android:paddingBottom="15.7dp"
-                            android:textColor="@color/white"
-                            android:textColorHint="@color/white"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
                             android:textSize="15sp"
                             android:textStyle="normal" />
 
@@ -195,9 +194,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/white_rect"
+                        android:background="@drawable/bg_blue"
                         android:text="UPDATE"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:textColor="@color/white"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -206,8 +205,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,6 +2,7 @@ package com.finwin.travancore.traviz.home.transfer.add_beneficiary;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -51,7 +52,11 @@ public class AddBeneficiaryViewmodel extends AndroidViewModel implements Observa
 
         repository.setDisposable(disposable);
         repository.setmAction(mAction);
+        sharedPreferences= application.getSharedPreferences("com.finwin.travancore.traviz",Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
     }
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     AddBeneficiaryRepository repository;
     MutableLiveData<AddBeneficiaryAction> mAction;
@@ -183,7 +188,7 @@ public class AddBeneficiaryViewmodel extends AndroidViewModel implements Observa
     public void addBeneficiary() {
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
-        items.put("customer_id", ConstantClass.const_cusId);
+        items.put("customer_id", sharedPreferences.getString(ConstantClass.CUST_ID,""));
         items.put("ben_name", obName.get());
         items.put("ben_mobile", obMobileNumber.get());
         items.put("ben_account_no", obAccountNumber.get());

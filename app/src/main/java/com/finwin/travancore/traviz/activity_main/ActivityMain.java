@@ -33,7 +33,7 @@ import com.finwin.travancore.traviz.home.home_fragment.HomeFragment;
 import ru.dimorinny.floatingtextbutton.FloatingTextButton;
 
 
-public class ActivityMain extends AppCompatActivity {
+public class  ActivityMain extends AppCompatActivity {
 
 
     private static FloatingTextButton flBtnMiniStmnt;
@@ -66,17 +66,21 @@ public class ActivityMain extends AppCompatActivity {
             public void onChanged(String s) {
                 switch (s) {
                     case "home":
-                        viewmodel.setHome();
-                        HomeFragment containerFragment = new HomeFragment();
-                        String backStateName = containerFragment.getClass().getName();
-                        FragmentManager manager = getSupportFragmentManager();
-                        boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
-                        if (!fragmentPopped) {
-                            //fragment not in back stack, create it.
-                            FragmentTransaction ft = manager.beginTransaction();
-                            ft.replace(R.id.frame_layout, containerFragment, "tagHomeFragment");
-                            ft.addToBackStack(backStateName);
-                            ft.commit();
+                        Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+                        if (f instanceof HomeFragment) {
+                        }else {
+                            viewmodel.setHome();
+                            HomeFragment containerFragment = new HomeFragment();
+                            String backStateName = containerFragment.getClass().getName();
+                            FragmentManager manager = getSupportFragmentManager();
+                            boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
+                            if (!fragmentPopped) {
+                                //fragment not in back stack, create it.
+                                FragmentTransaction ft = manager.beginTransaction();
+                                ft.replace(R.id.frame_layout, containerFragment, "tagHomeFragment");
+                                ft.addToBackStack(backStateName);
+                                ft.commit();
+                            }
                         }
                         break;
 

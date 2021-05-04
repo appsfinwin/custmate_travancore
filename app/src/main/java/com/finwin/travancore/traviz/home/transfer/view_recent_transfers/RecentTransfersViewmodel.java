@@ -1,6 +1,8 @@
 package com.finwin.travancore.traviz.home.transfer.view_recent_transfers;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -34,12 +36,16 @@ public class RecentTransfersViewmodel extends AndroidViewModel {
 
         repository.setDisposable(disposable);
         repository.setmAction(mAction);
+        sharedPreferences= application.getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
     }
     Enc_crypter encr = new Enc_crypter();
     ApiInterface apiInterface;
     RecentTransfersRepository repository;
     CompositeDisposable disposable;
     MutableLiveData<RecentTransactionsAction> mAction;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     public LiveData<RecentTransactionsAction> getmAction() {
         mAction=repository.getmAction();
@@ -49,7 +55,7 @@ public class RecentTransfersViewmodel extends AndroidViewModel {
     public void getRecentTransactions() {
         Map<String, Object> jsonParams = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        jsonParams.put("customer_id", ConstantClass.const_cusId);
+        jsonParams.put("customer_id", sharedPreferences.getString(ConstantClass.CUST_ID,""));
 
         params.put("data", encr.conRevString(Enc_Utils.enValues(jsonParams)));
 

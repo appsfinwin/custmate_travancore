@@ -3,6 +3,7 @@ package com.finwin.travancore.traviz.my_account.update_mpin;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -45,12 +46,14 @@ public class UpdateMPINFragment extends Fragment {
     UpdateMpinViewmodel viewmodel;
     Dialog dialogMpin;
     SweetAlertDialog loading,alertSuccess;
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
+        sharedPreferences= getActivity().getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_update_mpin, container, false);
         viewmodel = new ViewModelProvider(this).get(UpdateMpinViewmodel.class);
         binding.setViewmodel(viewmodel);
@@ -172,7 +175,7 @@ public class UpdateMPINFragment extends Fragment {
 
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
-        items.put("userid", ConstantClass.const_cusId);
+        items.put("userid", sharedPreferences.getString(ConstantClass.CUST_ID,""));
         items.put("oldMPIN", et_old_pin.getText().toString());
         items.put("newMPIN", et_confirm_new_min.getText().toString());
 

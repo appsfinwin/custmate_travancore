@@ -2,7 +2,9 @@ package com.finwin.travancore.traviz.home.reacharge;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,7 +54,8 @@ public class RechargeFragment extends Fragment {
     final Enc_crypter encr = new Enc_crypter();
     Spinner spnrOperator, spnrCircle;
     EditText EDTmob_or_id, EDTamount;
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     private LinearLayout linear1, linear2, linrPre_post;
     ImageButton iBtn_back;
     Button BtnProceed;
@@ -74,6 +77,10 @@ public class RechargeFragment extends Fragment {
         viewmodel = new ViewModelProvider(getActivity()).get(RechargeViewmodel.class);
         dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
         pDialog = new ProgressDialog(getContext(), R.style.AppCompatAlertDialogStyle);
+
+
+        sharedPreferences= getActivity().getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
 
         TVRecrgStatusType = binding.txtRecrgType;
         TVRecrgStatus = binding.txtRecrgStatus;
@@ -303,7 +310,7 @@ public class RechargeFragment extends Fragment {
     public void validateMPIN(String mpin) {
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
-        items.put("userid", ConstantClass.const_cusId);
+        items.put("userid", sharedPreferences.getString(ConstantClass.CUST_ID,""));
         items.put("MPIN", mpin);
 
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));

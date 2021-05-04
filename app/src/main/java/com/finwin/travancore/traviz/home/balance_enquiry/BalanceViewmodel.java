@@ -2,6 +2,7 @@ package com.finwin.travancore.traviz.home.balance_enquiry;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -38,8 +39,11 @@ public class BalanceViewmodel extends AndroidViewModel {
 
         repository.setCompositeDisposable(compositeDisposable);
         repository.setmAction(mAction);
+        sharedPreferences= application.getSharedPreferences("com.finwin.travancore.traviz",Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
     }
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     BalanceRepository repository;
     CompositeDisposable compositeDisposable;
     MutableLiveData<BalanceAction> mAction;
@@ -77,7 +81,7 @@ public class BalanceViewmodel extends AndroidViewModel {
 
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
-        items.put("account_no", ConstantClass.const_accountNumber);
+        items.put("account_no",  sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
 
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
         apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);

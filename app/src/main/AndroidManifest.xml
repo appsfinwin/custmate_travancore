@@ -20,12 +20,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name="com.finwin.travancore.traviz.home.transfer.view_beneficiary_list.BeneficiaryListActivity"></activity>
-        <activity android:name="com.finwin.travancore.traviz.sign_up.otp.SignupOtpActivity" />
-        <activity android:name="com.finwin.travancore.traviz.home.transfer.view_recent_transfers.transaction_details.TransactionDetailsActivity" />
-        <activity android:name="com.finwin.travancore.traviz.home.transfer.view_recent_transfers.RecentTransfersActivity" />
+        <activity android:name=".home.contact_us.ContactUsActivity"></activity>
+        <activity android:name=".home.transfer.view_beneficiary_list.BeneficiaryListActivity" />
+        <activity android:name=".sign_up.otp.SignupOtpActivity" />
+        <activity android:name=".home.transfer.view_recent_transfers.transaction_details.TransactionDetailsActivity" />
+        <activity android:name=".home.transfer.view_recent_transfers.RecentTransfersActivity" />
         <activity
-            android:name="com.finwin.travancore.traviz.ActivityInitial"
+            android:name=".ActivityInitial"
             android:fitsSystemWindows="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -35,27 +36,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.finwin.travancore.traviz.activity_main.ActivityMain"
+            android:name=".activity_main.ActivityMain"
             android:fitsSystemWindows="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.finwin.travancore.traviz.sign_up.sign_up.SignUpActivity"
+            android:name=".sign_up.sign_up.SignUpActivity"
             android:fitsSystemWindows="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.finwin.travancore.traviz.home.FundTransferReceipt"
+            android:name=".home.FundTransferReceipt"
             android:fitsSystemWindows="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.finwin.travancore.traviz.home.transfer.transfer_account_otp.FundTransferAccOTP"
+            android:name=".home.transfer.transfer_account_otp.FundTransferAccOTP"
             android:fitsSystemWindows="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.finwin.travancore.traviz.home.RechargeFragmentReceipt"
+            android:name=".home.RechargeFragmentReceipt"
             android:fitsSystemWindows="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.finwin.travancore.traviz.home.transfer.search_beneficiary.SearchBeneficiary"
+            android:name=".home.transfer.search_beneficiary.SearchBeneficiary"
             android:fitsSystemWindows="true"
             android:screenOrientation="portrait" />
     </application>

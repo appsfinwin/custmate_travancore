@@ -164,6 +164,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="9.3dp"
-        android:background="@color/colorPrimaryDark" />
+        android:background="@color/white_background_txt" />
 
 </LinearLayout>

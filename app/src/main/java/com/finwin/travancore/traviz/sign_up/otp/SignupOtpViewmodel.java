@@ -1,6 +1,8 @@
 package com.finwin.travancore.traviz.sign_up.otp;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -37,8 +39,13 @@ public class SignupOtpViewmodel extends AndroidViewModel {
 
         repository.setDisposable(disposable);
         repository.setmAction(mAction);
-    }
 
+        sharedPreferences= application.getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
+
+    }
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     SignupOtpRepository repository;
     CompositeDisposable disposable;
     MutableLiveData<SignupOtpAction> mAction;
@@ -64,7 +71,7 @@ public class SignupOtpViewmodel extends AndroidViewModel {
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
         items.put("particular", "CUSTMATE_REG");
-        items.put("account_no", ConstantClass.const_accountNumber);
+        items.put("account_no",  sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
         items.put("amount", "0");
         items.put("agent_id", "0");
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
@@ -94,10 +101,11 @@ public class SignupOtpViewmodel extends AndroidViewModel {
         Map<String, String> items = new HashMap<>();
         items.put("OTP_ID", otp_id);
         items.put("OTP", ob_otp.get());
-        items.put("Name", ConstantClass.const_name);
-        items.put("account_no", ConstantClass.const_accountNumber);
-        items.put("mobile_no", ConstantClass.const_phone);
-        items.put("password", ConstantClass.const_password);
+        items.put("Name", sharedPreferences.getString(ConstantClass.NAME,""));
+        items.put("account_no",
+                sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
+        items.put("mobile_no", sharedPreferences.getString(ConstantClass.PHONE,""));
+        items.put("password", sharedPreferences.getString(ConstantClass.PASSWORD,""));
 
         Log.e("Reg items", String.valueOf(items));
 

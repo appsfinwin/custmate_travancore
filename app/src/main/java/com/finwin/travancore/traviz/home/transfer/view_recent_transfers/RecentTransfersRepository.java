@@ -3,6 +3,8 @@ package com.finwin.travancore.traviz.home.transfer.view_recent_transfers;
 import androidx.lifecycle.MutableLiveData;
 
 import com.finwin.travancore.traviz.SupportingClass.Enc_crypter;
+import com.finwin.travancore.traviz.home.mini_statement.action.MiniStatementAction;
+import com.finwin.travancore.traviz.home.mini_statement.pojo.MiniStatementResponse;
 import com.finwin.travancore.traviz.home.transfer.view_recent_transfers.action.RecentTransactionsAction;
 import com.finwin.travancore.traviz.home.transfer.view_recent_transfers.pojo.transaction_list.TransactionListResponse;
 import com.finwin.travancore.traviz.pojo.Response;
@@ -12,6 +14,8 @@ import com.google.gson.GsonBuilder;
 
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
@@ -67,26 +71,7 @@ public class RecentTransfersRepository {
 
                     @Override
                     public void onSuccess(Response response) {
-
-                        try {
-                            String data=decValues(encr.revDecString(response.getData()));
-                            data=decValues(encr.revDecString(response.getData()));
-                            Gson gson = new GsonBuilder().create();
-                            TransactionListResponse transactionListResponse = gson.fromJson(data, TransactionListResponse.class);
-
-                            if (transactionListResponse.getBen().getData().size()>0)
-                            {
-                                mAction.setValue(new RecentTransactionsAction(RecentTransactionsAction.TRANSACTIONLIST_SUCCESS,transactionListResponse));
-                            }
-                            else
-                            {
-                                mAction.setValue(new RecentTransactionsAction(RecentTransactionsAction.TRANSACTIONLIST_EMPTY));
-                            }
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        fetchData(response.getData());
                     }
 
                     @Override
@@ -104,6 +89,38 @@ public class RecentTransfersRepository {
                     }
                 });
     }
+    Runnable mRunnable;
+    Executor mExecutor = Executors.newSingleThreadExecutor();
+    public void fetchData(final String response)
+    {
+        mRunnable = new Runnable() {
+            @Override
+            public void run() {
 
+
+                try {
+                    String data=decValues(encr.revDecString(response));
+                    data=decValues(encr.revDecString(response));
+                    Gson gson = new GsonBuilder().create();
+                    TransactionListResponse transactionListResponse = gson.fromJson(data, TransactionListResponse.class);
+
+                    if (transactionListResponse.getBen().getData().size()>0)
+                    {
+                        mAction.postValue(new RecentTransactionsAction(RecentTransactionsAction.TRANSACTIONLIST_SUCCESS,transactionListResponse));
+                    }
+                    else
+                    {
+                        mAction.postValue(new RecentTransactionsAction(RecentTransactionsAction.TRANSACTIONLIST_EMPTY));
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        mExecutor.execute(mRunnable);
+    }
 
 }

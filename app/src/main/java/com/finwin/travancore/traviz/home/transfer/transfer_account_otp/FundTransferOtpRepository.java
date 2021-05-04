@@ -69,24 +69,24 @@ public class FundTransferOtpRepository {
                     @Override
                     public void onSuccess(Response response) {
 
-                            try {
-                                String data=decValues(encr.revDecString(response.getData()));
-                                Gson gson = new GsonBuilder().create();
-                                NeftTransferResponse neftTransferResponse = gson.fromJson(data, NeftTransferResponse.class);
+                        try {
+                            String data=decValues(encr.revDecString(response.getData()));
+                            Gson gson = new GsonBuilder().create();
+                            NeftTransferResponse neftTransferResponse = gson.fromJson(data, NeftTransferResponse.class);
 
-                                if (neftTransferResponse.getReceipt().getData()!=null)
-                                {
-                                    mAction.setValue(new FundTransferOtpAction(FundTransferOtpAction.NEFT_SUCCESS,neftTransferResponse));
-                                }else
-                                {
-                                    String error=neftTransferResponse.getReceipt().getError();
-                                    mAction.setValue(new FundTransferOtpAction(FundTransferOtpAction.API_ERROR,error));
-                                }
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            if (neftTransferResponse.getReceipt().getData()!=null)
+                            {
+                                mAction.setValue(new FundTransferOtpAction(FundTransferOtpAction.NEFT_SUCCESS,neftTransferResponse));
+                            }else
+                            {
+                                String error=neftTransferResponse.getReceipt().getError();
+                                mAction.setValue(new FundTransferOtpAction(FundTransferOtpAction.API_ERROR,error));
                             }
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override

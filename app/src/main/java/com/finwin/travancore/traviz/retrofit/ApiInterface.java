@@ -1,6 +1,7 @@
 package com.finwin.travancore.traviz.retrofit;
 
 
+import com.finwin.travancore.traviz.home.contact_us.pojo.ContactResponse;
 import com.finwin.travancore.traviz.home.transfer.add_beneficiary.pojo.GetIfscResponse;
 import com.finwin.travancore.traviz.pojo.Response;
 import com.finwin.travancore.traviz.sign_up.sign_up.pojo.ApiKeyResponse;
@@ -16,6 +17,9 @@ public interface ApiInterface {
 
     @POST("custRequestingTransaction")
     Single<Response> neftTransfer(@Body RequestBody body);
+
+//    @POST("cashTransfer")
+//    Single<Response> accountTransfer(@Body RequestBody body);
 
     @POST("cashTransfer")
     Single<Response> accountTransfer(@Body RequestBody body);
@@ -79,5 +83,8 @@ public interface ApiInterface {
 
     @POST("getMiniStatement")
     Single<Response> getMiniStatement(@Body RequestBody body);
+
+    @POST("ContactUsManager_Api")
+    Single<ContactResponse> getContacts(@Body RequestBody body);
 
 }

@@ -1,7 +1,9 @@
 package com.finwin.travancore.traviz.account_selection_fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,19 +29,24 @@ import com.finwin.travancore.traviz.SupportingClass.Enc_crypter;
 import com.finwin.travancore.traviz.account_selection_fragment.action.AccountSelectionAction;
 import com.finwin.travancore.traviz.SupportingClass.ConstantClass;
 
+import java.util.Arrays;
+import java.util.function.Predicate;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AccountSelectionFragment extends Fragment {
     TextView name, ac_no, mobile;
-    String Name, Mobile, respndMsg, message, demessage;
     SweetAlertDialog dialog;
     CardView cv_ac_details;
     Button ok;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     final Enc_crypter encr = new Enc_crypter();
 
     AccountSelectionViewmodel viewmodel;
     FragmentAccountSelectionBinding binding;
+
 
     public AccountSelectionFragment() {
         // Empty constructor is required for DialogFragment
@@ -58,6 +65,10 @@ public class AccountSelectionFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+        sharedPreferences= getActivity().getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
         binding= DataBindingUtil.inflate(inflater, R.layout.fragment_account_selection,container,false);
         viewmodel=new ViewModelProvider(getActivity()).get(AccountSelectionViewmodel.class);
         binding.setViewmodel(viewmodel);
@@ -87,6 +98,10 @@ public class AccountSelectionFragment extends Fragment {
                         viewmodel.cancelLoading();
                         name.setText(accountSelectionAction.getAccountHolderResponse.getAccount().getData().getName());
                         mobile.setText( accountSelectionAction.getAccountHolderResponse.getAccount().getData().getMobile());
+
+                        String amount=getAmount(accountSelectionAction.getAccountHolderResponse.getAccount().getData().getCurrentBalance());
+                        editor.putString(ConstantClass.CURRENT_BALANCE,amount);
+                        editor.apply();
                         break;
 
                         case AccountSelectionAction.API_ERROR:
@@ -103,7 +118,7 @@ public class AccountSelectionFragment extends Fragment {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ConstantClass.mpinStatus) {
+                if (sharedPreferences.getBoolean(ConstantClass.MPIN_STATUS,false)) {
 
                     startActivity(new Intent(getActivity(), ActivityMain.class));
                     getActivity().finish();
@@ -119,5 +134,12 @@ public class AccountSelectionFragment extends Fragment {
             }
         });
     }
+
+    private String getAmount(String str) {
+
+        String myString = str.replaceAll("[^0-9\\.]","");
+        return myString;
+    }
+
 
 }

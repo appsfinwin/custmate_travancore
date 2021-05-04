@@ -8,6 +8,10 @@ public class Data {
     @SerializedName("ACNO")
     @Expose
     private String accountNumber;
+
+    @SerializedName("SCH_CAT")
+    @Expose
+    private String scheme;
     @SerializedName("NAME")
     @Expose
     private String name;
@@ -70,5 +74,13 @@ public class Data {
 
     public void setAccountStatus(String accountStatus) {
         this.accountStatus = accountStatus;
+    }
+
+    public String getScheme() {
+        return scheme;
+    }
+
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
     }
 }

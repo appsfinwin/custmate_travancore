@@ -8,8 +8,8 @@ android {
         applicationId "com.finwin.travancore.traviz"
         minSdkVersion 25
         targetSdkVersion 29
-        versionCode 8
-        versionName "1.8"
+        versionCode 13
+        versionName "2.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
@@ -26,6 +26,10 @@ android {
 
         // for view binding:
         // viewBinding true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes.each {

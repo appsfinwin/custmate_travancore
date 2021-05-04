@@ -78,6 +78,8 @@ public class HomeFragment extends Fragment {
         viewmodel=new ViewModelProvider(getActivity()).get(HomeViewmodel.class);
         binding.setViewmodel(viewmodel);
 
+
+
         newsDataList = new ArrayList<HashMap<String, String>>();
        // handleSSLHandshake();
         handler = new Handler();
@@ -259,7 +261,6 @@ public class HomeFragment extends Fragment {
             return false;
         }
         return status;
-
     }
 
 

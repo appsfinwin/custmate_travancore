@@ -2,6 +2,7 @@ package com.finwin.travancore.traviz.account_selection_fragment;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +23,7 @@ import com.finwin.travancore.traviz.SupportingClass.Enc_crypter;
 import com.finwin.travancore.traviz.account_selection_fragment.action.AccountSelectionAction;
 
 import com.finwin.travancore.traviz.databinding.FragmentAccountSelectionBinding;
+import com.finwin.travancore.traviz.login.pojo.AccNo;
 import com.finwin.travancore.traviz.retrofit.ApiInterface;
 import com.finwin.travancore.traviz.retrofit.RetrofitClient;
 import com.finwin.travancore.traviz.utils.Services;
@@ -47,20 +49,24 @@ public class AccountSelectionViewmodel extends AndroidViewModel implements Obser
         repository.setDisposable(disposable);
         repository.setmAction(mAction);
         setAccountNumbers();
+        sharedPreferences= application.getSharedPreferences("com.finwin.travancore.traviz",Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
+        getSelectedAccount();
+    }
+
+    private void getSelectedAccount() {
+       // setSelectedAccountNumber(listAccountNumbers.indexOf(
 
     }
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     private void setAccountNumbers() {
-        for (int i=0; i<ConstantClass.listAccountNumbers.size(); i++)
-        {
-            if ( ConstantClass.listScheme.get(i).contains("[FD]")){
-                listAccountNumbers.add(ConstantClass.listAccountNumbers.get(i)+ "(FD)");
-            }else if ( ConstantClass.listScheme.get(i).contains("[RD]")){
-                listAccountNumbers.add(ConstantClass.listAccountNumbers.get(i)+ "(RD)");
-            }else if ( ConstantClass.listScheme.get(i).contains("[SB]")){
-                listAccountNumbers.add(ConstantClass.listAccountNumbers.get(i)+ "(SB)");
-            }
 
+        for (AccNo accountNumber: ConstantClass.accountList)
+        {
+            listAccountNumbers.add(accountNumber.getAccNo() +" ("+ accountNumber.getSchemeName()+" )");
+            listAccountData.add(accountNumber);
         }
 
     }
@@ -74,6 +80,7 @@ public class AccountSelectionViewmodel extends AndroidViewModel implements Obser
 
     private PropertyChangeRegistry registry = new PropertyChangeRegistry();
     public ObservableArrayList<String> listAccountNumbers=new ObservableArrayList<>();
+    public ObservableArrayList<AccNo> listAccountData=new ObservableArrayList<>();
     public ObservableField<String> acountNumberSelected=new ObservableField<>("");
 
     public MutableLiveData<AccountSelectionAction> getmAction() {
@@ -95,8 +102,13 @@ public class AccountSelectionViewmodel extends AndroidViewModel implements Obser
     public void onSelectedAccountNumber(AdapterView<?> parent, View view, int position, long id)
     {
         binding.tvAcAccNo.setText(listAccountNumbers.get(position));
-        acountNumberSelected.set(ConstantClass.listAccountNumbers.get(position));
-        ConstantClass.const_accountNumber=ConstantClass.listAccountNumbers.get(position);
+        acountNumberSelected.set(listAccountData.get(position).getAccNo());
+        editor.putString(ConstantClass.ACCOUNT_NUMBER,listAccountData.get(position).getAccNo());
+        editor.putString(ConstantClass.SCHEME,listAccountData.get(position).getSchemeName());
+        editor.apply();
+        editor.commit();
+
+
         initLoading(view.getContext());
         getAccountHolder();
     }

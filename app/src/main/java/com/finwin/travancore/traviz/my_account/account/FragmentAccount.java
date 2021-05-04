@@ -1,8 +1,10 @@
 package com.finwin.travancore.traviz.my_account.account;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -38,7 +40,8 @@ public class FragmentAccount extends Fragment {
     final Enc_crypter encr = new Enc_crypter();
     FrgMyAccountBinding binding;
     AccountViewmodel viewmodel;
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -46,6 +49,10 @@ public class FragmentAccount extends Fragment {
         viewmodel= new ViewModelProvider(this).get(AccountViewmodel.class);
         viewmodel.setBinding(binding);
         binding.setViewModel(viewmodel);
+
+
+        sharedPreferences= getActivity().getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
         return binding.getRoot();
     }
 
@@ -56,11 +63,12 @@ public class FragmentAccount extends Fragment {
         dialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
 
 
-        binding.tvAccName.setText(ConstantClass.const_name);
-        binding.tvAccNo.setText(ConstantClass.const_accountNumber);
-        binding.tvAccMob.setText(ConstantClass.const_phone);
+        binding.tvAccName.setText(sharedPreferences.getString(ConstantClass.NAME,""));
+        binding.tvAccNo.setText( sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
+        binding.tvAccMob.setText(sharedPreferences.getString(ConstantClass.PHONE,""));
 
-        viewmodel.setSelectedAccountNumber(ConstantClass.listAccountNumbers.indexOf(ConstantClass.const_accountNumber));
+        viewmodel.setSelectedAccountNumber(viewmodel.listAccountNumbers.indexOf(( sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,"") +" ("+ sharedPreferences.getString(ConstantClass.SCHEME,"")+" )")));
+
 
         ConstraintLayout linear_changeMpin =binding.linearChangeMpin;
         linear_changeMpin.setOnClickListener(new View.OnClickListener() {

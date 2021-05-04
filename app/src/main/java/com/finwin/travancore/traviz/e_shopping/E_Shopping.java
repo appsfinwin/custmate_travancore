@@ -2,6 +2,7 @@ package com.finwin.travancore.traviz.e_shopping;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PointF;
@@ -43,16 +44,13 @@ public class E_Shopping extends Fragment implements QRCodeReaderView.OnQRCodeRea
     static QRCodeReaderView qrCodeReaderView;
     Context thisContext;
     String encryptedMsg="", mobile_number;
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     public E_Shopping(int position) {
         mPosition = position;
     }
 
-    final String accountNumber = "", accountName = "", account_mobile = "";
-    //    final String accountNumber = LoginFragment.const_accountNumber, accountName = LoginFragment.const_name, account_mobile = LoginFragment.const_phone;
-//    JSONParser jsonParser;
-//    SweetAlertDialog dialog;
-    String demessage, rspndMsg;
+
     final Enc_crypter encr = new Enc_crypter();
     String QRcontent, QRpassword;
 
@@ -60,9 +58,9 @@ public class E_Shopping extends Fragment implements QRCodeReaderView.OnQRCodeRea
     @Nullable
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         View rootView = inflater.inflate(R.layout.activity_main, container, false);
-//        jsonParser = new JSONParser();
-//        dialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
-//        pDialogue = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE);
+
+        sharedPreferences= getActivity().getSharedPreferences("com.finwin.travancore.traviz",Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
 
         if (mPosition == 20) {
             View e_shopping_view = inflater.inflate(R.layout.frg_e_shopping, container, false);
@@ -97,8 +95,6 @@ public class E_Shopping extends Fragment implements QRCodeReaderView.OnQRCodeRea
                 @Override
                 public void onClick(View view) {
                     mobile_number = number.getText().toString();
-//                    new getAccountInfo().execute();
-//                    getAccountInfo();
                     Log.e("onClick: ", "CLICKED...");
 
 
@@ -124,7 +120,7 @@ public class E_Shopping extends Fragment implements QRCodeReaderView.OnQRCodeRea
 //            QRcontent = ConstantClass.const_name + "," + ConstantClass.const_accountNumber + "," + ConstantClass.const_phone;
 
 //            QRcontent = "133509";
-            QRcontent = ConstantClass.const_accountNumber;
+            QRcontent = sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,"");
             QRpassword = ConstantClass.pinforQR;
 
             try {
@@ -148,8 +144,7 @@ public class E_Shopping extends Fragment implements QRCodeReaderView.OnQRCodeRea
 
             } catch (WriterException e) {
                 e.printStackTrace();
-//                ErrorLog.submitError(getActivity(), this.getClass().getSimpleName() + ":" + new Object() {
-//                }.getClass().getEnclosingMethod().getName(), e.toString());
+
             }
             return my_qr_view;
         }
@@ -157,9 +152,6 @@ public class E_Shopping extends Fragment implements QRCodeReaderView.OnQRCodeRea
 
     }
 
-    // Called when a QR is decoded
-    // "text" : the text encoded in QR
-    // "points" : points where QR control points are placed in View
     @Override
     public void onQRCodeRead(String text, PointF[] points) {
 //        pointsOverlayView.setPoints(points);
@@ -206,64 +198,5 @@ public class E_Shopping extends Fragment implements QRCodeReaderView.OnQRCodeRea
         super.onPause();
         qrCodeReaderView.stopCamera();
     }
-
-
-//    private void getAccountInfo() {
-////        String api_url = ip_global + "/getAccountHolder";
-////        dialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-////        dialog.setTitleText("Loading..");
-////        dialog.setCancelable(false);
-////        dialog.show();
-//
-//        requestQueue = Volley.newRequestQueue(getActivity());
-//        StringRequest postRequest = new StringRequest(Request.Method.POST, ConstantClass.api_getAccountHolder,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        // response
-//                        try {
-//                            JSONObject jsonFrstRespns = new JSONObject(response);
-//                            if (jsonFrstRespns.has("data")) {
-//                                demessage = Enc_Utils.decValues(encr.revDecString(jsonFrstRespns.getString("data")));
-//                                Log.e("demessage", demessage);
-//                            }
-//                            JSONObject jsonResponse = new JSONObject(demessage).getJSONObject("account");
-//
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                            rspndMsg = "error";
-//                            ErrorLog.submitError(getActivity(), this.getClass().getSimpleName() + ":" + new Object() {
-//                            }.getClass().getEnclosingMethod().getName(), e.toString());
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // TODO Auto-generated method stub
-//                        Log.d("ERROR", "error => " + error.toString());
-//                        rspndMsg = "error";
-//                        ErrorLog.submitError(getActivity(), this.getClass().getSimpleName() + ":" + new Object() {
-//                        }.getClass().getEnclosingMethod().getName(), error.toString());
-//                    }
-//                }
-//        ) {
-//            @Override
-//            protected Map<String, String> getParams() {
-//                // the POST parameters:
-//                Map<String, String> params = new HashMap<>();
-//                Map<String, String> items = new HashMap<>();
-//                items.put("mobile", mobile_number);
-//
-//                params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
-//                return params;
-//            }
-//        };
-//        requestQueue.add(postRequest);
-////        dialog.dismiss();
-//    }
-
-
-
 }
 

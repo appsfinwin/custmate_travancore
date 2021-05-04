@@ -1,6 +1,8 @@
 package com.finwin.travancore.traviz.my_account.account;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -15,16 +17,22 @@ import androidx.lifecycle.AndroidViewModel;
 import com.finwin.travancore.traviz.BR;
 import com.finwin.travancore.traviz.SupportingClass.ConstantClass;
 import com.finwin.travancore.traviz.databinding.FrgMyAccountBinding;
+import com.finwin.travancore.traviz.login.pojo.AccNo;
 
 public class AccountViewmodel extends AndroidViewModel implements Observable {
     public AccountViewmodel(@NonNull Application application) {
         super(application);
         setAccountNumbers();
+        sharedPreferences= application.getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
     }
     private PropertyChangeRegistry registry = new PropertyChangeRegistry();
     public ObservableArrayList<String> listAccountNumbers=new ObservableArrayList<>();
     public ObservableField<String> acountNumberSelected=new ObservableField<>("");
+    public ObservableArrayList<AccNo> listAccountData=new ObservableArrayList<>();
     private int selectedAccountNumber;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Bindable
     public int getSelectedAccountNumber() {
@@ -32,18 +40,11 @@ public class AccountViewmodel extends AndroidViewModel implements Observable {
     }
     private void setAccountNumbers() {
         listAccountNumbers.clear();
-        for (int i=0; i<ConstantClass.listAccountNumbers.size(); i++)
+        for (AccNo accountNumber: ConstantClass.accountList)
         {
-            if ( ConstantClass.listScheme.get(i).contains("[FD]")){
-                listAccountNumbers.add(ConstantClass.listAccountNumbers.get(i)+ "(FD)");
-            }else if ( ConstantClass.listScheme.get(i).contains("[RD]")){
-                listAccountNumbers.add(ConstantClass.listAccountNumbers.get(i)+ "(RD)");
-            }else if ( ConstantClass.listScheme.get(i).contains("[SB]")){
-                listAccountNumbers.add(ConstantClass.listAccountNumbers.get(i)+ "(SB)");
-            }
-
+            listAccountNumbers.add(accountNumber.getAccNo() +" ("+ accountNumber.getSchemeName()+" )");
+            listAccountData.add(accountNumber);
         }
-
     }
     public void setSelectedAccountNumber(int selectedAccountNumber) {
         this.selectedAccountNumber = selectedAccountNumber;
@@ -51,8 +52,13 @@ public class AccountViewmodel extends AndroidViewModel implements Observable {
     }
     public void onSelectedAccountNumber(AdapterView<?> parent, View view, int position, long id)
     {
-        ConstantClass.const_accountNumber = ConstantClass.listAccountNumbers.get(position);
-        binding.tvAccNo.setText(ConstantClass.const_accountNumber);
+        if (position!=0) {
+            editor.putString(ConstantClass.ACCOUNT_NUMBER,ConstantClass.accountList.get(position).getAccNo());
+            editor.putString(ConstantClass.SCHEME,ConstantClass.accountList.get(position).getSchemeName());
+            editor.apply();
+            binding.tvAccNo.setText(sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
+
+        }
     }
     FrgMyAccountBinding binding;
     public void setBinding(FrgMyAccountBinding binding) {

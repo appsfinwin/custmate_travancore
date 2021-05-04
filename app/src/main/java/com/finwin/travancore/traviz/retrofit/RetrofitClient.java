@@ -11,6 +11,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static Retrofit instance = null;
     private static Retrofit retrofitIfsc = null;
+    private static Retrofit retrofitTransfer = null;
+    private static Retrofit retrofitContacts = null;
 
     public static Retrofit RetrofitClient() {
 
@@ -26,9 +28,12 @@ public class RetrofitClient {
                     .build();
 
             instance = new Retrofit.Builder()
+                    //original
                     .baseUrl("https://custmatetravancore.digicob.in/")
                     //.baseUrl("http://www.finwintechnologies.com:5363/")
-                    //.baseUrl("https://custmateuvnl.digicob.in")
+
+                    //.baseUrl("http://103.210.40.113/")
+                    //.baseUrl("http://192.168.0.222/")
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
@@ -38,11 +43,6 @@ public class RetrofitClient {
     }    public static Retrofit RetrofitIfsc() {
 
         if (retrofitIfsc == null) {
-//            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-//            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-//            OkHttpClient client = getClient(token, logging, 10, TimeUnit.SECONDS);
-
 
             final OkHttpClient client = new OkHttpClient.Builder()
                     .readTimeout(300, TimeUnit.SECONDS)
@@ -57,6 +57,44 @@ public class RetrofitClient {
                     .build();
         }
         return retrofitIfsc;
+    }
+
+    public static Retrofit RetrofitTransfer() {
+
+        if (retrofitTransfer == null) {
+
+            final OkHttpClient client = new OkHttpClient.Builder()
+                    .readTimeout(100, TimeUnit.SECONDS)
+                    .connectTimeout(100, TimeUnit.SECONDS)
+                    .build();
+
+            retrofitTransfer = new Retrofit.Builder()
+                    .baseUrl("https://custmatetravancore.digicob.in/")
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+                    .build();
+        }
+        return retrofitTransfer;
+    }
+
+    public static Retrofit RetrofitContacts() {
+
+        if (retrofitContacts == null) {
+
+            final OkHttpClient client = new OkHttpClient.Builder()
+                    .readTimeout(100, TimeUnit.SECONDS)
+                    .connectTimeout(100, TimeUnit.SECONDS)
+                    .build();
+
+            retrofitContacts = new Retrofit.Builder()
+                    .baseUrl("http://192.168.0.221:170/")
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+                    .build();
+        }
+        return retrofitContacts;
     }
 
 }

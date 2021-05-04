@@ -58,6 +58,8 @@ public class FundTransferAccountViewmodel extends AndroidViewModel {
     public ObservableField<String> etAmount= new ObservableField<>("");
     public ObservableField<String> tvName= new ObservableField<>("");
     public ObservableField<String> tvMobile= new ObservableField<>("");
+    public ObservableField<String> beneficiaryScheme= new ObservableField<>("");
+    public ObservableField<Double> currentBalance= new ObservableField<>(0.0);
     public ObservableField<Boolean> isAcccountVerified = new ObservableField<>(false);
 
     public MutableLiveData<FundTransferAccountAction> getmAction() {
@@ -93,9 +95,9 @@ public class FundTransferAccountViewmodel extends AndroidViewModel {
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
         items.put("particular", "mob");
-        items.put("account_no", ConstantClass.const_accountNumber);
+        items.put("account_no", sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
         items.put("amount", etAmount.get());
-        items.put("agent_id", ConstantClass.const_cusId);
+        items.put("agent_id", sharedPreferences.getString(ConstantClass.CUST_ID,""));
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
 
 
@@ -117,7 +119,7 @@ public class FundTransferAccountViewmodel extends AndroidViewModel {
     public void getAccountHolder() {
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
-        items.put("account_no",  ConstantClass.const_accountNumber);
+        items.put("account_no",   sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
 
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
 
@@ -164,9 +166,29 @@ public class FundTransferAccountViewmodel extends AndroidViewModel {
         }else
         if (etAmount.get().equals("")) {
             Toast.makeText(view.getContext(), "Please Enter Amount", Toast.LENGTH_SHORT).show();
-        } else {
+        }else
+        if ((!sharedPreferences.getString(ConstantClass.SCHEME,"").equals("SB"))) {
+            Toast.makeText(view.getContext(), "Please select a savings account", Toast.LENGTH_SHORT).show();
+        }else
+        if ((!beneficiaryScheme.get().equals("SB"))  &&  (!beneficiaryScheme.get().equals("RD")) ) {
+            Toast.makeText(view.getContext(), "Please enter a savings account or a recurrent account", Toast.LENGTH_SHORT).show();
+        }else
+        if (etAccountNumber.get().equals(sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""))) {
+            Toast.makeText(view.getContext(), "Beneficiary account number cannot be same", Toast.LENGTH_SHORT).show();
+        }else
+        if (Double.parseDouble(etAmount.get())>currentBalance.get()) {
+            Toast.makeText(view.getContext(), "No sufficient balance!", Toast.LENGTH_SHORT).show();
+        }
+
+
+        else {
             mAction.setValue(new FundTransferAccountAction(FundTransferAccountAction.CLICK_PROCEED));
         }
+    }
+    private String getAmount(String str) {
+
+        String myString = str.replaceAll("[^0-9\\.]","");
+        return myString;
     }
 
     public void setBinding(FrgFundTransferAccBinding binding) {

@@ -2,6 +2,7 @@ package com.finwin.travancore.traviz.AdapterAndModel.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.finwin.travancore.traviz.AdapterAndModel.Models.GridModel;
 import com.finwin.travancore.traviz.R;
+import com.finwin.travancore.traviz.home.contact_us.ContactUsActivity;
 import com.finwin.travancore.traviz.home.reacharge.RechargeFragment;
 import com.finwin.travancore.traviz.SupportingClass.ConstantClass;
 
@@ -111,13 +113,11 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder> 
 //                            R.id.frame_layout,
 //                            myFragment).addToBackStack(null).commit();
                 } else if (position == 5) {
-//                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-//                    Fragment myFragment = new LoanFragment();
-//                    activity.getSupportFragmentManager().beginTransaction().replace(
-//                            R.id.frame_layout,
-//                            myFragment).addToBackStack(null).commit();
 
-                    Toast.makeText(context, "coming soon", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent (view.getContext(), ContactUsActivity.class);
+                    view.getContext().startActivity(intent);
+
+                   // Toast.makeText(context, "coming soon", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,19 +73,6 @@ public class FundTransferAcc extends Fragment {
         }
 
         viewmodel.getAccountHolder();
-
-
-//        BtnVerify.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (EDTaccno.getText().toString().equals("")) {
-//                    Toast.makeText(getActivity(), "Please Enter Credit Account Number", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    getCreditAccountHolderr(EDTaccno.getText().toString());
-//                }
-//            }
-//        });
-
         binding.ibtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,17 +81,7 @@ public class FundTransferAcc extends Fragment {
             }
         });
 
-//        BtnProceed = rootview.findViewById(R.id.btn_proceed);
-//        BtnProceed.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (EDTamount.getText().toString().equals("")) {
-//                    Toast.makeText(getActivity(), "Please Enter Amount", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    verifyMpin(getActivity());
-//                }
-//            }
-//        });
+        viewmodel.reset();
 
         return binding.getRoot();
     }
@@ -135,10 +113,10 @@ public class FundTransferAcc extends Fragment {
 
                         Intent intent = new Intent(getActivity(), FundTransferAccOTP.class);
                         intent.putExtra("from", "account");
-                        intent.putExtra("account_number", ConstantClass.const_accountNumber);
-                        intent.putExtra("cr_account_no", viewmodel.etAccountNumber.get());//crAcno
+                        intent.putExtra("account_number",sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
+                        intent.putExtra("cr_account_no", viewmodel.etAccountNumber.get());
                         intent.putExtra("process_amount", viewmodel.etAmount.get());
-                        intent.putExtra("agent_id", ConstantClass.const_cusId);
+                        intent.putExtra("agent_id", sharedPreferences.getString(ConstantClass.CUST_ID,""));
                         intent.putExtra("ben_id", "");
                         intent.putExtra("TXN_PAYMODE", "");
 
@@ -152,14 +130,28 @@ public class FundTransferAcc extends Fragment {
                         binding.tvTrnAccno.setText(fundTransferAccountAction.getAccountHolderResponse.getAccount().getData().getAccountNumber());
                         binding.tvTrnName.setText(fundTransferAccountAction.getAccountHolderResponse.getAccount().getData().getName());
                         binding.tvTrnMob.setText(fundTransferAccountAction.getAccountHolderResponse.getAccount().getData().getMobile());
+                        viewmodel.currentBalance.set(Double.valueOf(getAmount(fundTransferAccountAction.getAccountHolderResponse.getAccount().getData().getCurrentBalance())));
                         break;
 
                     case FundTransferAccountAction.GET_CREDIT_ACCOUNT_HOLDER_SUCCESS:
 
-                        viewmodel.isAcccountVerified.set(true);
-                        binding.btnVerify.setText("Account Number verified!!");
-                        binding.btnVerify.setTextColor(getResources().getColor(R.color.green));
-                        binding.btnVerify.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_verified_true, 0);
+                        viewmodel.beneficiaryScheme.set(fundTransferAccountAction.getAccountHolderResponse.getAccount().getData().getScheme());
+                        if (fundTransferAccountAction.getAccountHolderResponse.getAccount().getData().getScheme().equals("SB") ||
+                                fundTransferAccountAction.getAccountHolderResponse.getAccount().getData().getScheme().equals("RD")) {
+                            viewmodel.isAcccountVerified.set(true);
+                            binding.btnVerify.setText("Account Number verified!!");
+                            binding.btnVerify.setTextColor(getResources().getColor(R.color.green));
+                            binding.btnVerify.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_verified_true, 0);
+                        }else {
+
+                            View customView= LayoutInflater.from(getContext()).inflate(R.layout.layout_error_layout,null);
+                            TextView tv_error=customView.findViewById(R.id.tv_error);
+                            tv_error.setText("Please enter a savings account or a recurrent account!");
+                            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("ERROR")
+                                    .setCustomView(customView)
+                                    .show();
+                        }
                         break;
 
                     case FundTransferAccountAction.CLICK_PROCEED:
@@ -189,16 +181,20 @@ public class FundTransferAcc extends Fragment {
 
 
     }
+    private String getAmount(String str) {
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        String success = sharedPreferences.getString("success", "");
-        if (success.equals("yes")) {
-            viewmodel.reset();
-        }
+        String myString = str.replaceAll("[^0-9\\.]","");
+        return myString;
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//
+//        if (viewmodel!=null) {
+//            viewmodel.reset();
+//        }
+//    }
 
     @Override
     public void onStop() {
@@ -253,7 +249,7 @@ public class FundTransferAcc extends Fragment {
 
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
-        items.put("userid", ConstantClass.const_cusId);
+        items.put("userid", sharedPreferences.getString(ConstantClass.CUST_ID,""));
         items.put("MPIN", mpin);
 
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));

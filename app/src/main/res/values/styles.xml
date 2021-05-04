@@ -30,15 +30,15 @@
         <item name="colorControlNormal">@color/black_txt
         </item>
         <item name="colorControlActivated">@color/geryTxt</item>
-    </style>
+    </style>`
 
     <style name="spinnerTheme">
         <item name="android:textColor">@color/white</item>
 
         <item name="android:background">@color/colorPrimaryDark</item>
     </style>
-    <style name="alertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/colorPrimaryDark</item>
-    </style>
+        <style name="alertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+            <item name="colorAccent">@color/colorPrimaryDark</item>
+        </style>
 
 </resources>

@@ -1,6 +1,8 @@
 package com.finwin.travancore.traviz.sign_up.sign_up;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -27,21 +29,27 @@ import okhttp3.RequestBody;
 public class SignUpViewmodel extends AndroidViewModel {
     public SignUpViewmodel(@NonNull Application application) {
         super(application);
-        this.application=application;
-        repository= SignupRepository.getInstance();
+        this.application = application;
+        repository = SignupRepository.getInstance();
 
-        disposable=new CompositeDisposable();
-        mAction=new MutableLiveData<>();
+        disposable = new CompositeDisposable();
+        mAction = new MutableLiveData<>();
 
         repository.setDisposable(disposable);
         repository.setmAction(mAction);
+
+        sharedPreferences = application.getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
     }
 
-    public ObservableField<String> obAccountNumber=new ObservableField<>("");
-    public ObservableField<String> obName=new ObservableField<>("");
-    public ObservableField<String> obMobile=new ObservableField<>("");
-    public ObservableField<String> obPassword=new ObservableField<>("");
-    public ObservableField<String> obConfirmPassword=new ObservableField<>("");
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    public ObservableField<String> obAccountNumber = new ObservableField<>("");
+    public ObservableField<String> obName = new ObservableField<>("");
+    public ObservableField<String> obMobile = new ObservableField<>("");
+    public ObservableField<String> obPassword = new ObservableField<>("");
+    public ObservableField<String> obConfirmPassword = new ObservableField<>("");
     Application application;
     SignupRepository repository;
     ApiInterface apiInterface;
@@ -51,37 +59,33 @@ public class SignUpViewmodel extends AndroidViewModel {
     MutableLiveData<SignupAction> mAction;
 
 
-
     public MutableLiveData<SignupAction> getmAction() {
-        mAction=repository.getmAction();
+        mAction = repository.getmAction();
         return mAction;
     }
 
-    public void clickSignUp(View view)
-    {
+    public void clickSignUp(View view) {
         if ((!obAccountNumber.get().equals("")) &&
                 (!obName.get().equals("")) &&
                 (!obMobile.get().equals("")) &&
                 (!obPassword.get().equals("")) &&
-                (!obConfirmPassword.get().equals(""))&&
+                (!obConfirmPassword.get().equals("")) &&
                 (obPassword.get().equals(obConfirmPassword.get()))
-        )
-        {
+        ) {
 
-            ConstantClass.const_accountNumber = obAccountNumber.get();
-            ConstantClass.const_name = obName.get();
-            ConstantClass.const_phone = obMobile.get();
-            ConstantClass.const_password = obPassword.get();
+            editor.putString(ConstantClass.ACCOUNT_NUMBER, obAccountNumber.get());
+            editor.putString(ConstantClass.PHONE, obMobile.get());
+            editor.putString(ConstantClass.NAME, obName.get());
+            editor.putString(ConstantClass.PASSWORD, obPassword.get());
+            editor.apply();
             signUp();
 
-        }else
-        {
+        } else {
 
         }
     }
 
     private void signUp() {
-
 
 
         Map<String, String> params = new HashMap<>();
@@ -90,17 +94,17 @@ public class SignUpViewmodel extends AndroidViewModel {
 
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
 
-        String request=(new JSONObject(items)).toString();
+        String request = (new JSONObject(items)).toString();
         String data = encr.conRevString(Enc_Utils.enValues(items));
         params.put("data", data);
 
-            Map<String, Object> jsonParams = new HashMap<>();
+        Map<String, Object> jsonParams = new HashMap<>();
 
-            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
 
-            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
-            repository.getAccountHolder(apiInterface,body);
-        }
+        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        repository.getAccountHolder(apiInterface, body);
+    }
 
 
     @Override
@@ -115,8 +119,7 @@ public class SignUpViewmodel extends AndroidViewModel {
         repository.getApiKey(apiInterface);
     }
 
-    public void clickSignIn(View view)
-    {
+    public void clickSignIn(View view) {
         mAction.setValue(new SignupAction(SignupAction.CLICK_SIGN_IN));
     }
 }

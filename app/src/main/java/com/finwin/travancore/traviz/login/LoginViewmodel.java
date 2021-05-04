@@ -42,12 +42,12 @@ public class LoginViewmodel extends AndroidViewModel {
         repository.setmAction(mAction);
 
     }
-
+    Enc_crypter encr = new Enc_crypter();
     CompositeDisposable disposable;
     MutableLiveData<LoginAction> mAction;
     LoginRepository repository;
     ApiInterface apiInterface;
-    final Enc_crypter encr = new Enc_crypter();
+
     LayoutSiginInBinding binding ;
 
     public ObservableField<String> ob_userName=new ObservableField<>("");
@@ -91,9 +91,10 @@ public class LoginViewmodel extends AndroidViewModel {
         items.put("username", ob_userName.get());
         items.put("password", ob_password.get());
 
+
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
 
-
+        String request= new JSONObject(params).toString();
         apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
         repository.login(apiInterface, body);

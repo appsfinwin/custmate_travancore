@@ -1,5 +1,7 @@
 package com.finwin.travancore.traviz.home.loan;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -35,18 +37,19 @@ import static com.finwin.travancore.traviz.SupportingClass.Enc_Utils.decValues;
 
 public class LoanFirstFragment extends Fragment {
 
-    final Enc_crypter encr = new Enc_crypter();
-    String Name, Mobile, respndMsg, message, demessage;
-
     SweetAlertDialog dialog;
     ArrayAdapter<String> adapter;
     TextView TVname, TVmobile, TVac_no;
     Spinner sp_acc;
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.frg_loan_one, container, false);
 
+
+        sharedPreferences= getActivity().getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
         dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
 
         TVname = rootView.findViewById(R.id.tv_lon_name);
@@ -61,9 +64,9 @@ public class LoanFirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TVname.setText(ConstantClass.const_name);
-        TVmobile.setText(ConstantClass.const_phone);
-        TVac_no.setText(ConstantClass.const_accountNumber);
+        TVname.setText(sharedPreferences.getString(ConstantClass.NAME,""));
+        TVmobile.setText(sharedPreferences.getString(ConstantClass.PHONE,""));
+        TVac_no.setText(sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
 
 //        adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_list_item, const_acc_nos_array);
 //        sp_acc.setAdapter(adapter);

@@ -1,7 +1,9 @@
 package com.finwin.travancore.traviz.home;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,11 +23,16 @@ public class RechargeFragmentReceipt extends FragmentActivity {
     TextView transid, CreditAccountNO, DebitAccountNumber,Date,
             Name, Mobile, WithdrawalAmount;
     Button BtnOK;
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.frg_recharge_receipt);
+
+
+        sharedPreferences= getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
 
         DebitAccountNumber = (TextView) findViewById(R.id.tv_rec_accno);
         Date = (TextView) findViewById(R.id.tv_rec_date);
@@ -50,9 +57,9 @@ public class RechargeFragmentReceipt extends FragmentActivity {
             Date.setText(withdrawalDate);
         } catch (Exception ignored) {
         }
-        DebitAccountNumber.setText(ConstantClass.const_accountNumber);
-        Name.setText(ConstantClass.const_name);
-        Mobile.setText(ConstantClass.const_phone);
+        DebitAccountNumber.setText( sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
+        Name.setText(sharedPreferences.getString(ConstantClass.NAME,""));
+        Mobile.setText(sharedPreferences.getString(ConstantClass.PHONE,""));
 
         CreditAccountNO.setText(creditAccountNumber);
         WithdrawalAmount.setText(withdrawalAmount);

@@ -1,6 +1,8 @@
 package com.finwin.travancore.traviz.home.reacharge;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,8 +50,12 @@ public class RechargeViewmodel extends AndroidViewModel implements Observable {
         repository.setDisposable(disposable);
         repository.setmAction(mAction);
         initSpinner();
+        sharedPreferences= application.getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
 
     }
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 Application application;
     private void initSpinner() {
         listCircle.clear();
@@ -132,7 +138,7 @@ Application application;
     public void getCircle() {
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
-        items.put("account_no", ConstantClass.const_accountNumber);
+        items.put("account_no", sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
 
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
 
@@ -178,11 +184,11 @@ Application application;
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
 
-        items.put("account_no", ConstantClass.const_accountNumber);
+        items.put("account_no", sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
         items.put("agent_id", "0");
         items.put("amount", amount.get());
         items.put("circle", circle.get());
-        items.put("customer_id", ConstantClass.const_cusId);
+        items.put("customer_id", sharedPreferences.getString(ConstantClass.CUST_ID,""));
         items.put("mobile", mobileOrId.get());
         items.put("Operator", operator.get());
         items.put("recharge_type", operType.get());

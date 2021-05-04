@@ -35,9 +35,8 @@ public class ActivityMainViewmodel extends AndroidViewModel {
 
     public void clickHome(View view)
     {
-        if (!selectedFragment.get().equals("home")) {
             mAction.setValue("home");
-        }
+
     }
 
     public void setHome() {

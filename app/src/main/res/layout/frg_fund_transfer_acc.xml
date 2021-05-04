@@ -211,6 +211,7 @@
                                             android:text="@={viewmodel.etAccountNumber}"
                                             android:onTextChanged="@{(text, start, before, count) -> viewmodel.onTextChanged(text)}"
                                             android:id="@+id/edt_trn_accno"
+                                            android:inputType="number"
                                             android:layout_width="match_parent"
                                             android:layout_height="50dp"
                                             android:layout_marginStart="25dp"

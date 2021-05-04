@@ -2,6 +2,7 @@ package com.finwin.travancore.traviz.home.transfer.view_beneficiary_list;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 
@@ -34,7 +35,8 @@ public class BeneficiaryListViewmodel extends AndroidViewModel {
     BeneficiaryListRepository repository;
     MutableLiveData<BeneficiaryListAction> mAction;
     CompositeDisposable compositeDisposable;
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     public MutableLiveData<BeneficiaryListAction> getmAction() {
         mAction=repository.getmAction();
         return mAction;
@@ -48,12 +50,14 @@ public class BeneficiaryListViewmodel extends AndroidViewModel {
 
         repository.setDisposable(compositeDisposable);
         repository.setmAction(mAction);
+        sharedPreferences= application.getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
     }
 
     public void getBeneficiary(String benType) {
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
-        items.put("customer_id", ConstantClass.const_cusId);
+        items.put("customer_id", sharedPreferences.getString(ConstantClass.CUST_ID,""));
         items.put("ben_name", "");
         items.put("ben_mobile", "");
         items.put("ben_account_no", "");

@@ -59,10 +59,16 @@ public class LoginFragment extends Fragment {
 
     String latestVersion="",currentVersion="";
     LayoutSiginInBinding binding;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+
+        sharedPreferences= getActivity().getSharedPreferences("com.finwin.travancore.traviz",Context.MODE_PRIVATE);
+        editor= sharedPreferences.edit();
+
         binding = DataBindingUtil.inflate(inflater, R.layout.layout_sigin_in, container, false);
         viewmodel=new ViewModelProvider(getActivity()).get(LoginViewmodel.class);
         binding.setViewmodel(viewmodel);
@@ -104,29 +110,37 @@ public class LoginFragment extends Fragment {
                     case LoginAction.API_ERROR:
 
                         viewmodel.cancelLoading();
+                        View customView= LayoutInflater.from(getContext()).inflate(R.layout.layout_error_layout,null);
+                        TextView tv_error=customView.findViewById(R.id.tv_error);
+                        tv_error.setText(loginAction.getError());
                         new SweetAlertDialog(getContext(), SweetAlertDialog.BUTTON_NEGATIVE)
                                 .setTitleText("ERROR")
-                                .setContentText(loginAction.getError())
+                                .setCustomView(customView)
                                 .show();
                         break;
 
                         case LoginAction.LOGIN_SUCCESS:
                             viewmodel.cancelLoading();
-                            ConstantClass.const_name = loginAction.getLoginResponse().getUser().getData().getUSERNAME();
-                            ConstantClass.const_phone = loginAction.getLoginResponse().getUser().getData().getMOBILENO();
-                            ConstantClass.const_cusId =loginAction.getLoginResponse().getUser().getData().getUSERID();
-                            ConstantClass.mpinStatus = loginAction.getLoginResponse().getUser().getData().getMPINstatus();
-                            ConstantClass.listAccountNumbers=new ArrayList<>();
-                            ConstantClass.listAccountNumbers.clear();
-                            ConstantClass.listScheme=new ArrayList<>();
-                            ConstantClass.listScheme.clear();
+
+                            editor.putString(ConstantClass.CUST_ID,loginAction.getLoginResponse().getUser().getData().getUSERID());
+                            editor.putString(ConstantClass.PHONE,loginAction.getLoginResponse().getUser().getData().getMOBILENO());
+                            editor.putString(ConstantClass.BRANCH_ID,loginAction.getLoginResponse().getUser().getData().getBRANCHID());
+                            editor.putString(ConstantClass.NAME,loginAction.getLoginResponse().getUser().getData().getUSERNAME());
+                            editor.putBoolean(ConstantClass.MPIN_STATUS,loginAction.getLoginResponse().getUser().getData().getMPINstatus());
+
+                            ConstantClass.accountList=new ArrayList<>();
+                            ConstantClass.accountList.clear();
+//                            ConstantClass.listScheme=new ArrayList<>();
+//                            ConstantClass.listScheme.clear();
+                            editor.commit();
+                            editor.apply();
 
 
                             int size=loginAction.getLoginResponse().getUser().getData().getAccNo().size();
                             for (int j=0;j<size;j++)
                             {
-                                ConstantClass.listAccountNumbers.add(loginAction.getLoginResponse().getUser().getData().getAccNo().get(j).getAccNo());
-                                ConstantClass.listScheme.add(loginAction.getLoginResponse().getUser().getData().getAccNo().get(j).getSchname());
+                                ConstantClass.accountList.add(loginAction.getLoginResponse().getUser().getData().getAccNo().get(j));
+                               // ConstantClass.listScheme.add(loginAction.getLoginResponse().getUser().getData().getAccNo().get(j).getSchname());
                             }
                             openAccountSelectionFrag();
 
@@ -181,7 +195,7 @@ public class LoginFragment extends Fragment {
         if (latestVersion==null)
         {
             viewmodel.cancelLoading();
-            Toast.makeText(getActivity().getApplicationContext(), "Slow network Detected!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity().getApplicationContext(), "Slow network Detected!", Toast.LENGTH_SHORT).show();
         }else {
             viewmodel.cancelLoading();
             if (Float.parseFloat(currentVersion) < Float.parseFloat(latestVersion)) {
@@ -200,8 +214,6 @@ public class LoginFragment extends Fragment {
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
-//            ErrorLog.submitError(getContext(), this.getClass().getSimpleName() + ":" + new Object() {
-//            }.getClass().getEnclosingMethod().getName(), e.toString());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
 //            ErrorLog.submitError(getContext(), this.getClass().getSimpleName() + ":" + new Object() {

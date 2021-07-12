@@ -8,8 +8,11 @@ android {
         applicationId "com.finwin.travancore.traviz"
         minSdkVersion 25
         targetSdkVersion 29
-        versionCode 13
-        versionName "2.3"
+
+
+        versionCode 14
+        versionName "2.4"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
@@ -35,6 +38,10 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'AP_KE', App_ap
         it.buildConfigField 'String', 'AP_SR', App_sr
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
     }
 }
 
@@ -130,4 +137,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
 
     implementation 'org.jsoup:jsoup:1.8.3'
+    implementation 'com.google.android.play:core:1.7.3'
 }

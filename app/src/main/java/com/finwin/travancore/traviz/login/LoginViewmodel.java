@@ -12,7 +12,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.finwin.travancore.traviz.SupportingClass.Enc_Utils;
 import com.finwin.travancore.traviz.SupportingClass.Enc_crypter;
 
-import com.finwin.travancore.traviz.databinding.ActivityLoginBinding;
 import com.finwin.travancore.traviz.databinding.LayoutSiginInBinding;
 import com.finwin.travancore.traviz.login.action.LoginAction;
 import com.finwin.travancore.traviz.retrofit.ApiInterface;

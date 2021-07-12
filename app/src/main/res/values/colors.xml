@@ -21,7 +21,7 @@
     <color name="colorPrimary">#27436F</color>
     <color name="blue">#2f3185</color>
     <color name="colorPrimaryDark">#27436F</color>
-    <color name="colorAccent">#27436F</color>
+    <color name="colorAccent">#fff</color>
     <color name="bg_blue">#27436F</color>
     <color name="light_blue">#4549ED</color>
 

@@ -77,7 +77,12 @@ public class MiniStatementViewmodel extends AndroidViewModel {
         items.put("account_no",  sharedPreferences.getString(ConstantClass.ACCOUNT_NUMBER,""));
 
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        if (sharedPreferences.getString("login_mode","").equals("test")){
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+        }else {
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        }
+//        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
         repository.getMiniStatement(apiInterface, body);
     }

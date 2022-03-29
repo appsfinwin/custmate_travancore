@@ -146,7 +146,13 @@ public class NeftViewmodel extends AndroidViewModel implements Observable {
         loading.setTitleText("Please wait");
         loading.setContentText("validating..");
 
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        if (sharedPreferences.getString("login_mode","").equals("test")){
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+        }else {
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        }
+
+        //apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
         repository.validateMpin(apiInterface, body);
     }
@@ -164,7 +170,12 @@ public class NeftViewmodel extends AndroidViewModel implements Observable {
         Log.e("OTPGenerate: ", String.valueOf(items));
         Log.e("OTPGenerate data", String.valueOf(params));
 
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        if (sharedPreferences.getString("login_mode","").equals("test")){
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+        }else {
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        }
+        //apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
         repository.generateOtp(apiInterface, body);
     }
@@ -204,7 +215,12 @@ public class NeftViewmodel extends AndroidViewModel implements Observable {
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
         Log.e("getBeneficiary: data", encr.conRevString(Enc_Utils.enValues(items)));
 
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        if (sharedPreferences.getString("login_mode","").equals("test")){
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+        }else {
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        }
+        //apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
         repository.getBeneficiary(apiInterface, body);
     }

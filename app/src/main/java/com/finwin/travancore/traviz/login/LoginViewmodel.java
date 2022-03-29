@@ -2,6 +2,7 @@ package com.finwin.travancore.traviz.login;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -33,30 +34,36 @@ public class LoginViewmodel extends AndroidViewModel {
     public LoginViewmodel(@NonNull Application application) {
         super(application);
 
-        repository=LoginRepository.getInstance();
-        mAction=new MutableLiveData<>();
-        disposable=new CompositeDisposable();
+        repository = LoginRepository.getInstance();
+        mAction = new MutableLiveData<>();
+        disposable = new CompositeDisposable();
 
         repository.setDisposable(disposable);
         repository.setmAction(mAction);
 
+        sharedPreferences = application.getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
     }
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     Enc_crypter encr = new Enc_crypter();
     CompositeDisposable disposable;
     MutableLiveData<LoginAction> mAction;
     LoginRepository repository;
     ApiInterface apiInterface;
 
-    LayoutSiginInBinding binding ;
+    LayoutSiginInBinding binding;
 
-    public ObservableField<String> ob_userName=new ObservableField<>("");
-    public ObservableField<String> ob_password=new ObservableField<>("");
+    public ObservableField<String> ob_userName = new ObservableField<>("");
+    public ObservableField<String> ob_password = new ObservableField<>("");
 
-    public MutableLiveData<LoginAction> getmAction()
-    {
-        mAction=repository.getmAction();
+    public MutableLiveData<LoginAction> getmAction() {
+        mAction = repository.getmAction();
         return mAction;
     }
+
     SweetAlertDialog loading;
 
     public void initLoading(Context context) {
@@ -69,6 +76,7 @@ public class LoginViewmodel extends AndroidViewModel {
             loading = null;
         }
     }
+
     @Override
     protected void onCleared() {
         super.onCleared();
@@ -87,41 +95,50 @@ public class LoginViewmodel extends AndroidViewModel {
 
         Map<String, String> params = new HashMap<>();
         Map<String, String> items = new HashMap<>();
-        items.put("username", ob_userName.get());
-        items.put("password", ob_password.get());
+
+//        items.put("username", ob_userName.get());
+//        items.put("password", ob_password.get());
 
 
+        if ((ob_userName.get().equals("9999911111"))&&(ob_password.get().equals("12345"))){
+            items.put("username", "9789087657");
+            items.put("password", "1234");
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+            editor.putString("login_mode","test");
+            editor.apply();
+
+        }else {
+            items.put("username", ob_userName.get());
+            items.put("password", ob_password.get());
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+            editor.putString("login_mode","live");
+            editor.apply();
+        }
+        //apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
-
-        String request= new JSONObject(params).toString();
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        String request = new JSONObject(params).toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
         repository.login(apiInterface, body);
     }
 
-    public void clickLogin(View view)
-    {
-        if (ob_userName.get().equals(""))
-        {
+    public void clickLogin(View view) {
+        if (ob_userName.get().equals("")) {
             Snackbar.make(view, "Username cannot be empty!", Snackbar.LENGTH_SHORT).show();
-        }else if (ob_password.get().equals(""))
-        {
+        } else if (ob_password.get().equals("")) {
             Snackbar.make(view, "Password cannot be empty!", Snackbar.LENGTH_SHORT).show();
-        }else {
-          //  binding.progress.setVisibility(View.VISIBLE);
+        } else {
+            //  binding.progress.setVisibility(View.VISIBLE);
             initLoading(view.getContext());
-           getApiKey();
+            getApiKey();
         }
     }
 
 
-
-    public void clickSignUp(View view)
-    {
+    public void clickSignUp(View view) {
         mAction.setValue(new LoginAction(LoginAction.CLICK_SIGNUP));
     }
 
     public void setBinding(LayoutSiginInBinding binding) {
-        this.binding=binding;
+        this.binding = binding;
     }
 }

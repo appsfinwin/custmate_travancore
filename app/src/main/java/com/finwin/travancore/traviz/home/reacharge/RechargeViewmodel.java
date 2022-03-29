@@ -174,7 +174,12 @@ Application application;
 
     public void validateMpin(Map<String, String> params) {
 
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        if (sharedPreferences.getString("login_mode","").equals("test")){
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+        }else {
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        }
+        //apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
         repository.validateMpin(apiInterface, body);
     }

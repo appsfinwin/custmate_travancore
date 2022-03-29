@@ -13,6 +13,7 @@ public class RetrofitClient {
     private static Retrofit retrofitIfsc = null;
     private static Retrofit retrofitTransfer = null;
     private static Retrofit retrofitContacts = null;
+    private static Retrofit retrofitTest = null;
 
     public static Retrofit RetrofitClient() {
 
@@ -29,18 +30,21 @@ public class RetrofitClient {
 
             instance = new Retrofit.Builder()
                     //original
-                    .baseUrl("https://custmatetravancore.digicob.in/")
+                    //.baseUrl("https://custmatetravancore.digicob.in/")//travancore
+                    .baseUrl("http://192.168.0.221:171/")//local
                     //.baseUrl("http://www.finwintechnologies.com:5363/")
-
+                    //.baseUrl("http://custmatelocal.digicob.in/")
                     //.baseUrl("http://103.210.40.113/")
-                    //.baseUrl("http://192.168.0.222/")
+
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();
         }
         return instance;
-    }    public static Retrofit RetrofitIfsc() {
+    }
+
+    public static Retrofit RetrofitIfsc() {
 
         if (retrofitIfsc == null) {
 
@@ -95,6 +99,25 @@ public class RetrofitClient {
                     .build();
         }
         return retrofitContacts;
+    }
+
+    public static Retrofit RetrofitTest() {
+
+        if (retrofitTest == null) {
+
+            final OkHttpClient client = new OkHttpClient.Builder()
+                    .readTimeout(100, TimeUnit.SECONDS)
+                    .connectTimeout(100, TimeUnit.SECONDS)
+                    .build();
+
+            retrofitTest = new Retrofit.Builder()
+                    .baseUrl("http://custmatelocal.digicob.in/")
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+                    .build();
+        }
+        return retrofitTest;
     }
 
 }

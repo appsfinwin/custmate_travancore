@@ -3,15 +3,15 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.finwin.travancore.traviz"
         minSdkVersion 25
-        targetSdkVersion 29
+        targetSdkVersion 30
 
 
-        versionCode 15
-        versionName "2.5"
+        versionCode 18
+        versionName "2.7"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 25

@@ -120,7 +120,12 @@ public class AccountSelectionViewmodel extends AndroidViewModel implements Obser
         items.put("account_no", acountNumberSelected.get());
 
         params.put("data", encr.conRevString(Enc_Utils.enValues(items)));
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        if (sharedPreferences.getString("login_mode","").equals("test")){
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+        }else {
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        }
+        //apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
         repository.getAccountHolder(apiInterface, body);
     }

@@ -18,12 +18,14 @@ import com.finwin.travancore.traviz.SupportingClass.Enc_crypter;
 import com.finwin.travancore.traviz.databinding.FrgFundTransferAccBinding;
 import com.finwin.travancore.traviz.retrofit.ApiInterface;
 import com.finwin.travancore.traviz.retrofit.RetrofitClient;
+import com.finwin.travancore.traviz.utils.Services;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.disposables.CompositeDisposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -65,6 +67,19 @@ public class FundTransferAccountViewmodel extends AndroidViewModel {
     public MutableLiveData<FundTransferAccountAction> getmAction() {
         mAction=repository.getmAction();
         return mAction;
+    }
+
+    SweetAlertDialog loading;
+
+    public void initLoading(Context context) {
+        loading = Services.showProgressDialog(context);
+    }
+
+    public void cancelLoading() {
+        if (loading != null) {
+            loading.cancel();
+            loading = null;
+        }
     }
 
 
@@ -112,7 +127,12 @@ public class FundTransferAccountViewmodel extends AndroidViewModel {
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
 
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        if (sharedPreferences.getString("login_mode","").equals("test")){
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+        }else {
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        }
+        //apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         repository.validateMpin(apiInterface,body);
     }
 

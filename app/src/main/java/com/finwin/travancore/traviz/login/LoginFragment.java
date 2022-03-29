@@ -38,6 +38,7 @@ import com.finwin.travancore.traviz.SupportingClass.ErrorLog;
 
 
 import com.finwin.travancore.traviz.databinding.LayoutSiginInBinding;
+import com.finwin.travancore.traviz.forgot_password.ForgotPasswordActivity;
 import com.finwin.travancore.traviz.login.action.LoginAction;
 import com.finwin.travancore.traviz.sign_up.sign_up.SignUpActivity;
 import com.finwin.travancore.traviz.utils.VersionChecker;
@@ -87,6 +88,13 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.tvChangePassword.setOnClickListener(v -> {
+
+            Intent intent= new Intent(getActivity(), ForgotPasswordActivity.class);
+            startActivity(intent);
+
+        });
 
         viewmodel.getmAction().observe(getViewLifecycleOwner(), new Observer<LoginAction>() {
             @Override

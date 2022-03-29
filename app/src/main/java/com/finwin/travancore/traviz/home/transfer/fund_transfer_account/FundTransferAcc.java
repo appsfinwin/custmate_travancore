@@ -93,6 +93,7 @@ public class FundTransferAcc extends Fragment {
         viewmodel.getmAction().observe(getActivity(), new Observer<FundTransferAccountAction>() {
             @Override
             public void onChanged(FundTransferAccountAction fundTransferAccountAction) {
+
                 switch (fundTransferAccountAction.getAction()) {
                     case FundTransferAccountAction.VALIDATE_MPIN_SUCCESS:
                         sweetAlertDialog.dismissWithAnimation();

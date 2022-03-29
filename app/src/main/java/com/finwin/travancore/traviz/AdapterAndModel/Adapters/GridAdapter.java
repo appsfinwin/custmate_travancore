@@ -114,10 +114,10 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder> 
 //                            myFragment).addToBackStack(null).commit();
                 } else if (position == 5) {
 
-                    Intent intent = new Intent (view.getContext(), ContactUsActivity.class);
-                    view.getContext().startActivity(intent);
+//                    Intent intent = new Intent (view.getContext(), ContactUsActivity.class);
+//                    view.getContext().startActivity(intent);
 
-                   // Toast.makeText(context, "coming soon", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "coming soon", Toast.LENGTH_SHORT).show();
                 }
             }
         });

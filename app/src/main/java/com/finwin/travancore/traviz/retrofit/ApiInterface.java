@@ -87,4 +87,11 @@ public interface ApiInterface {
     @POST("ContactUsManager_Api")
     Single<ContactResponse> getContacts(@Body RequestBody body);
 
+
+    @POST("ForgotPassword_Api")
+    Single<Response> forgotPassword(@Body RequestBody body);
+
+    @POST("ForgotPassword_Api")
+    Single<Response> resetPassword(@Body RequestBody body);
+
 }

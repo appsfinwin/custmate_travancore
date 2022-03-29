@@ -1,6 +1,8 @@
 package com.finwin.travancore.traviz.home.transfer.transfer_account_otp;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -28,9 +30,12 @@ public class FundTranferOtpViewmodel extends AndroidViewModel {
 
         repository.setDisposable(disposable);
         repository.setmAction(mAction);
+        sharedPreferences = application.getSharedPreferences("com.finwin.travancore.traviz", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
     }
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     public MutableLiveData<FundTransferOtpAction> getmAction() {
         mAction=repository.getmAction();
         return mAction;
@@ -48,7 +53,15 @@ public class FundTranferOtpViewmodel extends AndroidViewModel {
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
 
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        if (sharedPreferences.getString("login_mode","").equals("test")){
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+        }else {
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        }
+
+        String request= new JSONObject(params).toString();
+         request= new JSONObject(params).toString();
+       // apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         repository.neftTransfer(apiInterface,body);
     }
 
@@ -58,7 +71,12 @@ public class FundTranferOtpViewmodel extends AndroidViewModel {
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
 
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        if (sharedPreferences.getString("login_mode","").equals("test")){
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+        }else {
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        }
+        //apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         repository.accountTransfer(apiInterface,body);
     }
 
@@ -68,7 +86,12 @@ public class FundTranferOtpViewmodel extends AndroidViewModel {
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (new JSONObject(params)).toString());
 
-        apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        if (sharedPreferences.getString("login_mode","").equals("test")){
+            apiInterface = RetrofitClient.RetrofitTest().create(ApiInterface.class);
+        }else {
+            apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
+        }
+        //apiInterface = RetrofitClient.RetrofitClient().create(ApiInterface.class);
         repository.resendOtp(apiInterface,body);
     }
 
